@@ -7,14 +7,12 @@ div.body {
 
 div.sphinxsidebar input {
     background-color: #09121a;
-    color: #afafaf;
+    font-color: #afafaf;
 }
 
 div.sphinxsidebar #searchbox {
-    color: #afafaf;
-    border: 1px solid #101f2d;
+    font-color: #afafaf;
 }
-
 
 dt:target, .highlight {
     background: #09121a;

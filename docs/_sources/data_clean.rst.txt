@@ -1,7 +1,7 @@
-environment module
+data\_clean module
 ==================
 
-.. automodule:: environment
+.. automodule:: data_clean
    :members:
    :undoc-members:
    :show-inheritance:

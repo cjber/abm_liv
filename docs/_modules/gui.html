@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>gui &#8212; abm  documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -34,29 +32,31 @@
           <div class="body" role="main">
             
   <h1>Source code for gui</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">tkinter</span> <span class="k">as</span> <span class="nn">tk</span>
-<span class="kn">import</span> <span class="nn">imageio</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">import</span> <span class="nn">bs4</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">agent</span> <span class="k">as</span> <span class="nn">agf</span>
-<span class="kn">import</span> <span class="nn">environment</span> <span class="k">as</span> <span class="nn">envf</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">tkinter</span> <span class="k">as</span> <span class="nn">tk</span>  <span class="c1"># gui</span>
+<span class="kn">import</span> <span class="nn">imageio</span>  <span class="c1"># save images and gifs</span>
+<span class="kn">import</span> <span class="nn">os</span>  <span class="c1"># os related functions</span>
+<span class="kn">import</span> <span class="nn">requests</span>  <span class="c1"># web &#39;scraping&#39;</span>
+<span class="kn">import</span> <span class="nn">csv</span>  <span class="c1"># read and write csv files</span>
+<span class="kn">import</span> <span class="nn">bs4</span>  <span class="c1"># further web scraping tools</span>
+<span class="kn">import</span> <span class="nn">random</span>  <span class="c1"># provides (pseudo) random number functions</span>
+<span class="kn">import</span> <span class="nn">agent</span> <span class="k">as</span> <span class="nn">agf</span>  <span class="c1"># agent class framework</span>
+<span class="kn">import</span> <span class="nn">environment</span> <span class="k">as</span> <span class="nn">envf</span>  <span class="c1"># environment class framework</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>  <span class="c1"># various plotting utilities</span>
 <span class="n">mpl</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;TkAgg&#39;</span><span class="p">)</span>  <span class="c1"># noqa, have to load before plt etc.</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">matplotlib.animation</span> <span class="k">as</span> <span class="nn">anim</span>
-<span class="kn">import</span> <span class="nn">matplotlib.backends.backend_tkagg</span> <span class="k">as</span> <span class="nn">mpltk</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># plots function</span>
+<span class="kn">import</span> <span class="nn">matplotlib.animation</span> <span class="k">as</span> <span class="nn">anim</span>  <span class="c1"># animated plots</span>
+<span class="kn">import</span> <span class="nn">matplotlib.backends.backend_tkagg</span> <span class="k">as</span> <span class="nn">mpltk</span>  <span class="c1"># plot backend for gui</span>
 
 <span class="c1"># ensure that when updating my own imports they are updated here as well</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">agf</span><span class="p">)</span>
 <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">envf</span><span class="p">)</span>
 
-
 <span class="c1"># taken from https://stackoverflow.com/a/34351483</span>
 <span class="c1"># as using LinearSegmentedColormap, have to reverse each color individually</span>
+
+
 <div class="viewcode-block" id="reverse_colourmap"><a class="viewcode-back" href="../gui.html#gui.reverse_colourmap">[docs]</a><span class="k">def</span> <span class="nf">reverse_colourmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_cmap_r&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reverse the colour direction of a mpl cmap</span>
@@ -83,7 +83,7 @@
     <span class="k">return</span> <span class="n">my_cmap_r</span></div>
 
 
-<div class="viewcode-block" id="create_env"><a class="viewcode-back" href="../gui.html#gui.create_env">[docs]</a><span class="k">def</span> <span class="nf">create_env</span><span class="p">():</span>
+<div class="viewcode-block" id="create_env"><a class="viewcode-back" href="../gui.html#gui.create_env">[docs]</a><span class="k">def</span> <span class="nf">create_env</span><span class="p">(</span><span class="n">env_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a base environment using predetermined values.</span>
 
@@ -96,17 +96,17 @@
     <span class="n">environment</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># empty matrix</span>
 
     <span class="c1"># create 2d matrix using csv txt file</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;in.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">env_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
         <span class="n">csv_reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csv_reader</span><span class="p">:</span>
             <span class="n">rowlist</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="p">:</span>
-                    <span class="n">value</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="mi">205</span><span class="p">)</span>
-                <span class="n">rowlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">int_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">int_value</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="p">:</span>
+                    <span class="n">int_value</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="mi">205</span><span class="p">)</span>
+                <span class="n">rowlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">int_value</span><span class="p">)</span>
             <span class="n">environment</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rowlist</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">environment</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">environment</span></div>
 
 
 <span class="c1"># read in table of agent positional data</span>
@@ -121,8 +121,9 @@
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>  <span class="c1"># start figure environment</span>
 
 <span class="c1"># assign fixed min and max environment values</span>
-<span class="n">min_val</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">max_val</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">min_val</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">max_val</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="c1"># must be type matplotlib.color.LinearSegmentedColormap</span>
 <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span>
 <span class="n">cmap</span> <span class="o">=</span> <span class="n">reverse_colourmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
 <span class="n">cmap</span><span class="o">.</span><span class="n">set_over</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
@@ -130,11 +131,11 @@
 
 <div class="viewcode-block" id="AgentGUI"><a class="viewcode-back" href="../gui.html#gui.AgentGUI">[docs]</a><span class="k">class</span> <span class="nc">AgentGUI</span><span class="p">:</span>
 
-    <span class="c1"># print some preliminary warning to consider before running the model</span>
+    <span class="c1"># print some preliminary warnings to consider before running the model</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Select Agents and Iterations from dropdowns...&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Before running select save as gif, or infinite iterations&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">:</span> <span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">,</span> <span class="n">env_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initial state of the GUI.</span>
 
@@ -147,8 +148,8 @@
         <span class="c1"># default master variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">master</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Model GUI&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="n">create_env</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">agf</span><span class="o">.</span><span class="n">Agent</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">create_env</span><span class="p">(</span><span class="n">env_file</span><span class="p">)</span>
 
         <span class="c1"># tkinter frames</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">master</span><span class="p">)</span>
@@ -166,7 +167,7 @@
 
         <span class="c1"># variables for saving models</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_img</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># tkinter interactive buttons etc, very large section ending line 233</span>
         <span class="c1"># generally assigning functions to buttons, and button positioning</span>
@@ -257,13 +258,13 @@
                                <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
         <span class="c1"># default iteration variables</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">carry_on</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_gen</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_agent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_iter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_iter</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">carry_on</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_gen</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inf</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_agent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_agent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_iter</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 
-<div class="viewcode-block" id="AgentGUI.update"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="AgentGUI.update"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Takes inputs from self.agents using the Agent class.</span>
 
@@ -300,11 +301,11 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
         <span class="c1"># allow for saving of the current model step as an image</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_img</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_img</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
             <span class="n">savename</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_gen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">savename</span> <span class="o">+</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AgentGUI.initial_vars"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.initial_vars">[docs]</a>    <span class="k">def</span> <span class="nf">initial_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="AgentGUI.initial_vars"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.initial_vars">[docs]</a>    <span class="k">def</span> <span class="nf">initial_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save the initial dropdown values as variables.</span>
 
@@ -314,7 +315,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_agent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_iter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_iter</span><span class="o">.</span><span class="n">get</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="AgentGUI.gen_function"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.gen_function">[docs]</a>    <span class="k">def</span> <span class="nf">gen_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AgentGUI.gen_function"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.gen_function">[docs]</a>    <span class="k">def</span> <span class="nf">gen_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine the number of generations using a Tk.IntVar().</span>
 
@@ -326,7 +327,7 @@
 <span class="sd">        Doing this iteratively preserves the correct order.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">num_iter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_iter</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">num_iter</span> <span class="o">=</span> <span class="mi">999999999</span>  <span class="c1"># cannot use inf float</span>
@@ -343,7 +344,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_img</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">create_gif</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="AgentGUI.run"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="AgentGUI.run"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initial setup of the agents and environment. Create a mpl animation.</span>
 
@@ -381,12 +382,12 @@
         <span class="k">except</span><span class="p">:</span>  <span class="c1"># noqa don&#39;t know why this doesn&#39;t comply with pep</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: First choose parameters from dropdowns.&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AgentGUI.resume"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.resume">[docs]</a>    <span class="k">def</span> <span class="nf">resume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AgentGUI.resume"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.resume">[docs]</a>    <span class="k">def</span> <span class="nf">resume</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Allow for resuming from current iteration after stopping the model</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_gen</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_iter</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_gen</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_iter</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">carry_on</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">animation</span> <span class="o">=</span> <span class="n">anim</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span>  <span class="c1"># noqa</span>
                 <span class="n">fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_function</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="kc">False</span>
@@ -395,14 +396,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot run the model! Check Parameters.&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AgentGUI.stop"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AgentGUI.stop"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Immediately stop the model, displaying the current generation.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">carry_on</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="AgentGUI.toggle_inf"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.toggle_inf">[docs]</a>    <span class="k">def</span> <span class="nf">toggle_inf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="AgentGUI.toggle_inf"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.toggle_inf">[docs]</a>    <span class="k">def</span> <span class="nf">toggle_inf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Allow a button to hold a sunken position to indicate toggling of a</span>
 <span class="sd">        parameter.</span>
@@ -416,18 +417,18 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inf_btn</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s1">&#39;relief&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;sunken&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">inf_btn</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">relief</span><span class="o">=</span><span class="s2">&quot;raised&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_iter</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="s2">&quot;iterations.&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">carry_on</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_btn</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;relief&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;raised&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">inf_btn</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">relief</span><span class="o">=</span><span class="s2">&quot;sunken&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running infinite iterations.&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">carry_on</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot run infinite iteraions and save as GIF!&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AgentGUI.toggle_save"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.toggle_save">[docs]</a>    <span class="k">def</span> <span class="nf">toggle_save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AgentGUI.toggle_save"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.toggle_save">[docs]</a>    <span class="k">def</span> <span class="nf">toggle_save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        As with toggle_inf() allows a tkinter button to be sunken.</span>
 
@@ -443,7 +444,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot save as GIF and run infinite iterations!&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AgentGUI.create_gif"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.create_gif">[docs]</a>    <span class="k">def</span> <span class="nf">create_gif</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AgentGUI.create_gif"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.create_gif">[docs]</a>    <span class="k">def</span> <span class="nf">create_gif</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save a GIF of the model from gen 0 to the final generation.</span>
 
@@ -460,7 +461,7 @@
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating GIF:&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;/model.gif&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AgentGUI.change"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.change">[docs]</a>    <span class="k">def</span> <span class="nf">change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="AgentGUI.change"><a class="viewcode-back" href="../gui.html#gui.AgentGUI.change">[docs]</a>    <span class="k">def</span> <span class="nf">change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Indicate when parameters and changed and what has changed.</span>
 
@@ -473,7 +474,7 @@
 
 
 <span class="n">root</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
-<span class="n">gui</span> <span class="o">=</span> <span class="n">AgentGUI</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+<span class="n">gui</span> <span class="o">=</span> <span class="n">AgentGUI</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">env_file</span><span class="o">=</span><span class="s1">&#39;in.txt&#39;</span><span class="p">)</span>
 
 <span class="n">root</span><span class="o">.</span><span class="n">resizable</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
@@ -491,7 +492,7 @@
 
 
 
-<p class="blurb">testing</p>
+<p class="blurb">An agent based model framework, written in python and providing GUI features through Tkinter.</p>
 
 
 
@@ -510,13 +511,11 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -537,7 +536,7 @@
       &copy;2019, Cillian Berragan.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
