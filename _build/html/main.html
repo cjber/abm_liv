@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>main module &#8212; ABM Liverpool Crime 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-main">
+<span id="main-module"></span><h1>main module<a class="headerlink" href="#module-main" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="main.Model_tk">
+<em class="property">class </em><code class="sig-prename descclassname">main.</code><code class="sig-name descname">Model_tk</code><span class="sig-paren">(</span><em class="sig-param">master: tkinter.Tk</em>, <em class="sig-param">bounds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#Model_tk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="main.Model_tk.change">
+<code class="sig-name descname">change</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicate when parameters and changed and what has changed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>tk.IntVar</em><em>(</em><em>)</em>) – Values associated with the dropdown selections</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.create_gif">
+<code class="sig-name descname">create_gif</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.create_gif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.create_gif" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a GIF of the model from gen 0 to the final generation.</p>
+<p>Uses a list of all images stored during each iteration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.gen_function">
+<code class="sig-name descname">gen_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.gen_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.gen_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the number of generations using a Tk.IntVar().</p>
+<p>The number of generations is selected by a dropdown, additionally
+the number of iterations may be set to infinite.</p>
+<p>In this function, if save as a gif is selection, the images are
+grouped into an array.
+Doing this iteratively preserves the correct order.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.initial_vars">
+<code class="sig-name descname">initial_vars</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.initial_vars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.initial_vars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the initial dropdown values as variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>tk.IntVar</em><em>(</em><em>)</em>) – Values associated with the dropdown selections</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.resume">
+<code class="sig-name descname">resume</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.resume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.resume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow for resuming from current iteration after stopping the model</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial setup of the agents and environment. Create a mpl animation.</p>
+<p>xy coordinates of the agents here are given as a list from a web table
+td_xs and td_yx.
+The try: except: blocks prevent errors from occurring before dropdown
+selection, and indicate to the user what is required.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Immediately stop the model, displaying the current generation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.toggle_inf">
+<code class="sig-name descname">toggle_inf</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.toggle_inf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.toggle_inf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow a button to hold a sunken position to indicate toggling of a
+parameter.</p>
+<p>This merely changes the variable self.inf to 1 and allows the model
+to resume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>tk.IntVar</em><em>(</em><em>)</em>) – Values associated with the dropdown selections</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.toggle_save">
+<code class="sig-name descname">toggle_save</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.toggle_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.toggle_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>As with toggle_inf() allows a tkinter button to be sunken.</p>
+<p>Toggles save_img to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes inputs from self.agents using the Agent class.</p>
+<p>Agent class taken from the import agent (agf), functions associated
+with the agent class are updated iteratively and displayed on a plot.</p>
+<p>Update also contains code to allow for the production of a model gif.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>tk.IntVar</em><em>(</em><em>)</em>) – Values associated with dropdown selections</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">ABM Liverpool Crime</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Cillian Berragan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/main.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

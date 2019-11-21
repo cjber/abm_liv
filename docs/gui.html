@@ -1,0 +1,250 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>gui module &#8212; abm  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gui">
+<span id="gui-module"></span><h1>gui module<a class="headerlink" href="#module-gui" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="gui.AgentGUI">
+<em class="property">class </em><code class="descclassname">gui.</code><code class="descname">AgentGUI</code><span class="sig-paren">(</span><em>master</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#AgentGUI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.AgentGUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="gui.AgentGUI.change">
+<code class="descname">change</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#AgentGUI.change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.AgentGUI.change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicate when parameters and changed and what has changed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>tk.IntVar</em><em>(</em><em>)</em>) – Values associated with the dropdown selections</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gui.AgentGUI.create_gif">
+<code class="descname">create_gif</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#AgentGUI.create_gif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.AgentGUI.create_gif" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a GIF of the model from gen 0 to the final generation.</p>
+<p>Uses a list of all images stored during each iteration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gui.AgentGUI.gen_function">
+<code class="descname">gen_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#AgentGUI.gen_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.AgentGUI.gen_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the number of generations using a Tk.IntVar().</p>
+<p>The number of generations is selected by a dropdown, additionally
+the number of iterations may be set to infinite.</p>
+<p>In this function, if save as a gif is selection, the images are
+grouped into an array.
+Doing this iteratively preserves the correct order.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gui.AgentGUI.initial_vars">
+<code class="descname">initial_vars</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#AgentGUI.initial_vars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.AgentGUI.initial_vars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the initial dropdown values as variables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>tk.IntVar</em><em>(</em><em>)</em>) – Values associated with the dropdown selections</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gui.AgentGUI.resume">
+<code class="descname">resume</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#AgentGUI.resume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.AgentGUI.resume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow for resuming from current iteration after stopping the model</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gui.AgentGUI.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#AgentGUI.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.AgentGUI.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial setup of the agents and environment. Create a mpl animation.</p>
+<p>xy coordinates of the agents here are given as a list from a web table
+td_xs and td_yx.
+The try: except: blocks prevent errors from occurring before dropdown
+selection, and indicate to the user what is required.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gui.AgentGUI.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#AgentGUI.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.AgentGUI.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Immediately stop the model, displaying the current generation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gui.AgentGUI.toggle_inf">
+<code class="descname">toggle_inf</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#AgentGUI.toggle_inf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.AgentGUI.toggle_inf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow a button to hold a sunken position to indicate toggling of a
+parameter.</p>
+<p>This merely changes the variable self.inf to 1 and allows the model
+to resume.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>tk.IntVar</em><em>(</em><em>)</em>) – Values associated with the dropdown selections</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gui.AgentGUI.toggle_save">
+<code class="descname">toggle_save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#AgentGUI.toggle_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.AgentGUI.toggle_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>As with toggle_inf() allows a tkinter button to be sunken.</p>
+<p>Toggles save_img to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gui.AgentGUI.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#AgentGUI.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.AgentGUI.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes inputs from self.agents using the Agent class.</p>
+<p>Agent class taken from the import agent (agf), functions associated
+with the agent class are updated iteratively and displayed on a plot.</p>
+<p>Update also contains code to allow for the production of a model gif.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong> (<em>tk.IntVar</em><em>(</em><em>)</em>) – Values associated with dropdown selections</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="gui.create_env">
+<code class="descclassname">gui.</code><code class="descname">create_env</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#create_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.create_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a base environment using predetermined values.</p>
+<p>Values given here are provided in a text file and read in
+as a two dimensional array.
+Values above 200 are assigned a random value between 201 and 205,
+this allows for values above 200 to represent green algae and be eaten.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gui.reverse_colourmap">
+<code class="descclassname">gui.</code><code class="descname">reverse_colourmap</code><span class="sig-paren">(</span><em>cmap</em>, <em>name='my_cmap_r'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gui.html#reverse_colourmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gui.reverse_colourmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverse the colour direction of a mpl cmap</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cmap</strong> (<em>dict</em><em>(</em><em>)</em>) – Input colormap</li>
+<li><strong>name</strong> (<em>dict</em><em>(</em><em>)</em><em>, </em><em>optional</em>) – reverse cmap out name, defaults to ‘my_cmap_r’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">abm</a></h1>
+
+
+
+<p class="blurb">testing</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Cillian Berragan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/gui.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

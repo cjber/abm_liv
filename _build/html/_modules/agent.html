@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>agent &#8212; abm  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for agent</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
+
+
+<div class="viewcode-block" id="Agent"><a class="viewcode-back" href="../agent.html#agent.Agent">[docs]</a><span class="k">class</span> <span class="nc">Agent</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environment</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">agents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;Agent&#39;</span><span class="p">],</span>
+                 <span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create agents for use in a Agent Based Model.</span>
+
+<span class="sd">        :param environment: Environment for agents to interact with.</span>
+<span class="sd">        :type environment: list()</span>
+<span class="sd">        :param agents: Agents for use in model</span>
+<span class="sd">        :type agents: list()</span>
+<span class="sd">        :param x: Agent x location in environment, defaults to None</span>
+<span class="sd">        :type x: list(), optional</span>
+<span class="sd">        :param y: Agent y location in environment, defaults to None</span>
+<span class="sd">        :type y: list(), optional</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="n">environment</span>
+
+        <span class="c1"># initial location of each agent is a random xy location</span>
+        <span class="c1"># in the environment or if xy is given as an integer 1-100,</span>
+        <span class="c1"># this is instead used and multiplied by 3</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="mi">3</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">*</span><span class="mi">3</span>
+
+        <span class="c1"># initial agent variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="n">agents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dead</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preg</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.6</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colour</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span>
+
+<div class="viewcode-block" id="Agent.distance_between"><a class="viewcode-back" href="../agent.html#agent.Agent.distance_between">[docs]</a>    <span class="k">def</span> <span class="nf">distance_between</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find euclidean distance between two xy coordinates</span>
+
+<span class="sd">        :param agent: Every agent in the model</span>
+<span class="sd">        :type agent: list()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">agent</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">agent</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Agent.move"><a class="viewcode-back" href="../agent.html#agent.Agent.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Move each agent randomly with a range of 1 to 5 pixels in positive</span>
+<span class="sd">        and negative x/y directions</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">)</span>
+        <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">rand</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+        <span class="c1"># modulus ensures that an agent may not randomly move outside the</span>
+        <span class="c1"># environment by giving the remainder of the calculation</span>
+        <span class="c1"># if (self.xy +/- rand) &gt; width/height essentially wraps the agent</span>
+        <span class="c1"># around the environment</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dead</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">rand</span><span class="p">)</span> <span class="o">%</span> <span class="n">width</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">rand</span><span class="p">)</span> <span class="o">%</span> <span class="n">width</span>
+            <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">rand</span><span class="p">)</span> <span class="o">%</span> <span class="n">height</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">rand</span><span class="p">)</span> <span class="o">%</span> <span class="n">height</span></div>
+
+<div class="viewcode-block" id="Agent.eat"><a class="viewcode-back" href="../agent.html#agent.Agent.eat">[docs]</a>    <span class="k">def</span> <span class="nf">eat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environment</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allow each agent to eat the environment.</span>
+
+<span class="sd">        Increase self store,and reduce environment value.</span>
+<span class="sd">        Agents may eat from a random range surrounding their current position,</span>
+<span class="sd">        as agents eat more they grow and are able to eat from a large range.</span>
+<span class="sd">        Agents may only eat green environment.</span>
+
+<span class="sd">        :param environment: The environment</span>
+<span class="sd">        :type environment: list()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># increase range by size, not a fixed scale to prevent exponential</span>
+        <span class="c1"># increase</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">y_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">x_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="n">y_range</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="n">x_range</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="c1"># don&#39;t eat environment if above 100, i.e. a carnivore</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">y_range</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">x_range</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.25</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dead</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="c1"># randomly eat within the x_range and y_range</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">x_range</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span> <span class="n">y_range</span><span class="p">,</span> <span class="n">y_range</span><span class="p">):</span>
+                        <span class="n">y_coord</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">j</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">x_coord</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">)</span>
+                        <span class="c1"># only eat environment above 200, (algae)</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="n">y_coord</span><span class="p">][</span><span class="n">x_coord</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="n">y_coord</span><span class="p">][</span><span class="n">x_coord</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">store</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># size must be 1/10 the store or they grow too large</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Agent.death"><a class="viewcode-back" href="../agent.html#agent.Agent.death">[docs]</a>    <span class="k">def</span> <span class="nf">death</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine a state for agents to die.</span>
+
+<span class="sd">        Agents die if they do not eat enough for their age.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">&gt;</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">*</span><span class="mi">10</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dead</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dead</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="o">.</span><span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">colour</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;An agent died of hunger.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Agent.make_baby"><a class="viewcode-back" href="../agent.html#agent.Agent.make_baby">[docs]</a>    <span class="k">def</span> <span class="nf">make_baby</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allow production of more agents given certain conditions.</span>
+
+<span class="sd">        Agents must be within a fixed proximity determined by the</span>
+<span class="sd">        distance_between() function.</span>
+<span class="sd">        Pregnancy increases with further interaction until a baby is born.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_between</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">preg</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">preg</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dead</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A baby is born.&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Agent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span>
+                                         <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">preg</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Agent.carnivore"><a class="viewcode-back" href="../agent.html#agent.Agent.carnivore">[docs]</a>    <span class="k">def</span> <span class="nf">carnivore</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        At a certain stage agents will grow into carnivores</span>
+
+<span class="sd">        Carnivores combine their current store with that of the agent</span>
+<span class="sd">        they have eaten.</span>
+<span class="sd">        Carnivores may no longer eat the environment.</span>
+<span class="sd">        Larger carnivores eat smaller ones.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">colour</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">preg</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+                <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_between</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+                    <span class="c1"># the larger carnivore eats the smaller carnivore</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span> <span class="o">&gt;</span> <span class="n">agent</span><span class="o">.</span><span class="n">store</span> <span class="o">&amp;</span> <span class="n">agent</span><span class="o">.</span><span class="n">store</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span> <span class="o">+</span> <span class="n">agent</span><span class="o">.</span><span class="n">store</span>
+                        <span class="n">agent</span><span class="o">.</span><span class="n">dead</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="c1"># remove the eaten agent</span>
+                        <span class="n">agent</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">999</span>
+                        <span class="n">agent</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">999</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A predator eats another, gaining&quot;</span><span class="p">,</span> <span class="n">agent</span><span class="o">.</span><span class="n">store</span><span class="p">,</span>
+                              <span class="s2">&quot;resources.&quot;</span><span class="p">)</span>
+                        <span class="n">agent</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="mi">0</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">abm</a></h1>
+
+
+
+<p class="blurb">An agent based model framework, written in python and providing GUI features through Tkinter.</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Cillian Berragan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

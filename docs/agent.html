@@ -1,0 +1,178 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>agent module &#8212; abm  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-agent">
+<span id="agent-module"></span><h1>agent module<a class="headerlink" href="#module-agent" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="agent.Agent">
+<em class="property">class </em><code class="descclassname">agent.</code><code class="descname">Agent</code><span class="sig-paren">(</span><em>environment</em>, <em>agents</em>, <em>x=None</em>, <em>y=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agent.html#Agent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#agent.Agent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="agent.Agent.carnivore">
+<code class="descname">carnivore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/agent.html#Agent.carnivore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#agent.Agent.carnivore" title="Permalink to this definition">¶</a></dt>
+<dd><p>At a certain stage agents will grow into carnivores</p>
+<p>Carnivores combine their current store with that of the agent
+they have eaten.
+Carnivores may no longer eat the environment.
+Larger carnivores eat smaller ones.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="agent.Agent.death">
+<code class="descname">death</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/agent.html#Agent.death"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#agent.Agent.death" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine a state for agents to die.</p>
+<p>Agents die if they do not eat enough for their age.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="agent.Agent.distance_between">
+<code class="descname">distance_between</code><span class="sig-paren">(</span><em>agent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agent.html#Agent.distance_between"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#agent.Agent.distance_between" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find euclidean distance between two xy coordinates</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>agent</strong> (<em>list</em><em>(</em><em>)</em>) – Every agent in the model</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="agent.Agent.eat">
+<code class="descname">eat</code><span class="sig-paren">(</span><em>environment</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agent.html#Agent.eat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#agent.Agent.eat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow each agent to eat the environment.</p>
+<p>Increase self store,and reduce environment value.
+Agents may eat from a random range surrounding their current position,
+as agents eat more they grow and are able to eat from a large range.
+Agents may only eat green environment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>environment</strong> (<em>list</em><em>(</em><em>)</em>) – The environment</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="agent.Agent.make_baby">
+<code class="descname">make_baby</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/agent.html#Agent.make_baby"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#agent.Agent.make_baby" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow production of more agents given certain conditions.</p>
+<p>Agents must be within a fixed proximity determined by the
+distance_between() function.
+Pregnancy increases with further interaction until a baby is born.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="agent.Agent.move">
+<code class="descname">move</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/agent.html#Agent.move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#agent.Agent.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move each agent randomly with a range of 1 to 5 pixels in positive
+and negative x/y directions</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">abm</a></h1>
+
+
+
+<p class="blurb">testing</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Cillian Berragan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/agent.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
