@@ -43,33 +43,33 @@ class Police:
                 cur_dist = min(cur_dist)
                 #print(cur_dist)
                 if random.random() < 0.5:
-                    self.x = (self.x + .005)
+                    self.x = (self.x + 1000)
                     dist = []
                     for c in crime_list:
                         dist.append(self.distance_between(c))
                     if min(dist) > cur_dist:
-                        self.x = (self.x - .005)
+                        self.x = (self.x - 1000)
                 else:
-                    self.x = (self.x - .005)
+                    self.x = (self.x - 1000)
                     dist = []
                     for c in crime_list:
                         dist.append(self.distance_between(c))
                     if min(dist) > cur_dist:
-                        self.x = (self.x + .005)
+                        self.x = (self.x + 1000)
                 if random.random() < 0.5:
-                    self.y = (self.y + .005)
+                    self.y = (self.y + 1000)
                     dist = []
                     for c in crime_list:
                         dist.append(self.distance_between(c))
                     if min(dist) > cur_dist:
-                        self.y = (self.y - .005)
+                        self.y = (self.y - 1000)
                 else:
-                    self.y = (self.y - .005)
+                    self.y = (self.y - 1000)
                     dist = []
                     for c in crime_list:
                         dist.append(self.distance_between(c))
                     if min(dist) > cur_dist:
-                        self.y = (self.y + .005)
+                        self.y = (self.y + 1000)
 
             df = pd.DataFrame({'x': [self.x], 'y': [self.y]})
             geom = gpd.points_from_xy(df.x, df.y)

@@ -1,0 +1,7 @@
+digraph "classes" {
+charset="utf-8"
+rankdir=BT
+"0" [label="{Crime|bounds\lcol : str\lgeom\lsolved : int\lx\ly\l|distance_between(agent)\lsolve(police_list)\l}", shape="record"];
+"1" [label="{Model_tk|ag_lab : Label\lbg : GeoDataFrame\lbounds\lcanvas : FigureCanvasTkAgg\lcarry_on : bool\lclose_button : Button\lcrime_api : TextFileReader\lcrime_list : list\lcurrent_gen : int\lenvironment : GeoDataFrame\lextent\lfilenames : list\lframe : Frame\lframe_controls : Frame\lframe_widgets : Frame\linf : bool\linf_btn : Button\lit_lab : Label\lmaster\lmenu_crime : OptionMenu\lmenu_iter : OptionMenu\lmenu_police : OptionMenu\lnum_crime : int\lnum_iter : int\lnum_police : int\lopts_crime : list\lopts_iter : list\lopts_police : list\lpolice_list : list\lresume_btn : Button\lsave_btn : Button\lsave_img : int\lstart_btn : Button\lstop_btn : Button\lvar_crime : IntVar\lvar_iter : IntVar\lvar_police : IntVar\l|change()\lcreate_gif()\lgen_function()\linitial_vars()\lresume()\lrun()\lstop()\ltoggle_inf()\ltoggle_save()\lupdate()\l}", shape="record"];
+"2" [label="{Police|bounds\lgeom\lx\ly\l|distance_between(agent)\lmove(crime)\l}", shape="record"];
+}

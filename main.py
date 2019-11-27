@@ -17,50 +17,52 @@ import crime
 import police
 import api
 
-import importlib
-importlib.reload(crime)
-importlib.reload(police)
-importlib.reload(api)
-
-fig, ax = plt.subplots()  # start figure environment
-
 bounds = gpd.read_file("./data/liverpool_bounds_fixed.gpkg")
-bounds = bounds.to_crs({'init': 'epsg:4326'})
+#bounds = bounds.to_crs({'init': 'epsg:4326'})
 environment = gpd.read_file("./data/liv_grid.shp")
-environment = environment.to_crs({'init': 'epsg:4326'})
+#environment = environment.to_crs({'init': 'epsg:4326'})
 environment['stat'] = 0
 
 
 class Model_tk:
-
     # print some preliminary warnings to consider before running the model
     print("Select Agents and Iterations from dropdowns...")
     print("Before running select save as gif, or infinite iterations")
 
-    def __init__(self, master: tk.Tk, bounds, environment) -> None:
-        """
-        Initial state of the GUI.
+    def __init__(self, master: tk.Tk,
+                 bounds: gpd.GeoDataFrame,
+                 environment: gpd.GeoDataFrame) -> None:
+        """Define the initial state of the tkinter main window.
 
-        Running through tkinter, allows for interactivity.
+        Defines initial variables and state for the main tkinter GUI window
+        initialised by a tk.Tk() class given byt he master variable.
 
-        :param master: tkinter main frame
-        :type master: tk.Tk()
+        Args:
+            master (tk.Tk): The main GUI window.
+            bounds (gpd.GeoDataFrame): A geographic dataframe showing the
+                                       area of interest.
+            environment (gpd.GeoDataFrame): A geographic dataframe of 
+                                            multipolygons derived from the 
+                                            bounds.
+
+        Returns:
+            None: Returns only the tkinter GUI when the python script is ran.
         """
+
+        # variables set externally
+        self.master = master
+        self.bounds = bounds
+        self.environment = environment
+
+        self.bounds = self.bounds.geometry
+        self.extent = self.bounds.bounds
+        self.csv_data = pd.DataFrame()
 
         # default master variables
-        self.master = master
         self.master.title("Model GUI")
         self.police_list: List[police.Police] = []
         self.crime_list: List[crime.Crime] = []
-
-        self.crime_api = api.data
-
-        # create bounds and bg for plot
-        self.bounds = bounds
-        self.bounds = self.bounds.geometry
-        self.extent = self.bounds.bounds
-
-        self.environment = environment
+        self.crime_api: pd.DataFrame = api.df
 
         bounds_gdf = gpd.GeoDataFrame(self.bounds, crs=self.bounds.crs,
                                       geometry=self.bounds.geometry)
@@ -79,12 +81,17 @@ class Model_tk:
         self.frame_widgets.grid(row=1, column=1, sticky="swe")
 
         # model plot area position and init
-        self.canvas = mpltk.FigureCanvasTkAgg(fig, master=self.frame)
+        self.fig = plt.figure(figsize=(7, 7))
+        self.ax = self.fig.add_axes([0, 0, 1, 1])
+        self.canvas = mpltk.FigureCanvasTkAgg(self.fig, master=self.frame)
         self.canvas._tkcanvas.grid(row=0, column=1, rowspan=2, sticky="nswe")
 
         # variables for saving models
         self.save_img = 0
         self.filenames: List[str] = []
+
+        # variable for kde plots
+        self.kde = 0
 
         # tkinter interactive buttons etc, very large section ending line 233
         # generally assigning functions to buttons, and button positioning
@@ -101,7 +108,7 @@ class Model_tk:
         self.var_police.trace("w", self.initial_vars)
 
         self.var_iter = tk.IntVar()
-        self.opts_iter = [10, 100, 1000]
+        self.opts_iter = [10, 20, 30, 40, 50]
         self.var_iter.set(self.opts_iter[0])
         self.var_iter.trace("w", self.change)
         self.var_iter.trace("w", self.initial_vars)
@@ -173,6 +180,15 @@ class Model_tk:
                           padx=5,
                           pady=5)
 
+        self.kde_btn = tk.Button(
+            self.frame_widgets,
+            text="kdeinite",
+            command=self.toggle_kde)
+        self.kde_btn.grid(row=0,
+                          column=5,
+                          padx=5,
+                          pady=5)
+
         self.save_btn = tk.Button(
             self.frame_widgets,
             text="Save as GIF",
@@ -193,22 +209,35 @@ class Model_tk:
         self.carry_on: bool = True
         self.current_gen: int = 0
         self.inf: bool = False
+        self.kde: bool = False
         self.num_crime: int = self.var_crime.get()
         self.num_police: int = self.var_police.get()
         self.num_iter: int = self.var_iter.get()
 
     def update(self, *args: int) -> None:
+        """Produce output for matplotlib animation, with agents as input.
+
+        Takes police and crime agents from external modules, runs the local
+        class functions, and produces a matplotlib figure with the updated
+        agents.
+
+        Args:
+            args (int): Values derived from the GUI dropdown menus.
+
+        Returns:
+            None: The updated agents are displayed on a figure.
         """
-        Takes inputs from self.agents using the Agent class.
-
-        Agent class taken from the import agent (agf), functions associated
-        with the agent class are updated iteratively and displayed on a plot.
-
-        Update also contains code to allow for the production of a model gif.
-
-        :param args: Values associated with dropdown selections
-        :type args: tk.IntVar()
-        """
+        ax = self.ax
+        plt.xlim(self.extent['minx'][0], self.extent['maxx'][0])
+        plt.ylim(self.extent['miny'][0], self.extent['maxy'][0])
+        plt.axis('off')
+        # additional crimes
+        if random.random() < 0.2:
+            rand = random.randint(1, 5)
+            for _ in range(rand):
+                self.crime_list.append(
+                    crime.Crime(self.bounds, self.crime_api))
+            print(rand, "new crimes.")
 
         # iterate through each agent and run each class function
         for p in self.police_list:
@@ -216,6 +245,8 @@ class Model_tk:
 
         for c in self.crime_list:
             c.solve(self.police_list)
+
+        self.write_results()
 
         pol = pd.DataFrame()
         for p in self.police_list:
@@ -233,7 +264,7 @@ class Model_tk:
             within.append(w)
         self.environment['within'] = within
 
-        self.environment['stat'] += self.environment['within']*5
+        self.environment['stat'] += self.environment['within']
 
         cri = pd.DataFrame()
         for c in self.crime_list:
@@ -253,17 +284,23 @@ class Model_tk:
                 within.append(w)
             self.environment['within'] = within
 
-            self.environment['stat'] -= self.environment['within']*5
+            self.environment['stat'] -= self.environment['within']
 
         # plot each agent on the input environment
         self.bounds.plot(ax=ax, facecolor="white", edgecolor="none")
 
-        self.environment.plot(ax=ax, column='stat', cmap='RdYlGn',
-                              edgecolor="black", linewidth=2, alpha=0.5)
-        if len(cri) > 2:
-            sns.kdeplot(cri.x, cri.y, ax=ax, shade=True, cmap='Reds', alpha=.5)
+        if not self.kde:
+            self.environment.plot(ax=ax, column='stat', cmap='RdYlGn',
+                                  edgecolor="white", linewidth=1,
+                                  vmin=-10, vmax=10)
+        # TODO: add toggle option for these
+        if self.kde:
+            if len(cri) > 2:
+                sns.kdeplot(cri.x, cri.y, ax=ax, shade=True,
+                            cmap='Reds', alpha=.5)
 
-        sns.kdeplot(pol.x, pol.y, ax=ax, shade=True, cmap='Blues', alpha=.5)
+            sns.kdeplot(pol.x, pol.y, ax=ax, shade=True,
+                        cmap='Blues', alpha=.5)
 
         for p in self.police_list:
             ax.scatter(p.x, p.y, facecolor="Blue", edgecolors="Green")
@@ -278,41 +315,40 @@ class Model_tk:
         plt.ylim(self.extent['miny'][0], self.extent['maxy'][0])
         plt.axis('off')
 
+        print("Current Iteration", self.current_gen + 1, "of",
+              self.var_iter.get())
+
         # allow for saving of the current model step as an image
         if self.save_img == 1 and self.inf is False:
             savename = str(self.current_gen + 1)
             plt.savefig(savename + ".jpg")
 
-        # additional crimes
-        if random.random() < 0.1:
-            rand = random.randint(1, 5)
-            for _ in range(rand):
-                self.crime_list.append(
-                    crime.Crime(self.bounds, self.crime_api))
-                print("New crime..")
-
     def initial_vars(self, *args: int) -> None:
-        """
-        Save the initial dropdown values as variables.
+        """Retrieves values from GUI dropdown menus.
 
-        :param args: Values associated with the dropdown selections
-        :type args: tk.IntVar()
+        Function required to obtain initial values of dropdown menus.
+
+        Args:
+            args (int): Values derived from the dropdown menus.
+
+        Returns:
+            None: Variables for starting numbers of agents and iterations.
         """
         self.num_crime = self.var_crime.get()
         self.num_police = self.var_police.get()
         self.num_iter = self.var_iter.get()
 
     def gen_function(self) -> None:
-        """
-        Determine the number of generations using a Tk.IntVar().
+        """Stop iterations based on the selection.
 
-        The number of generations is selected by a dropdown, additionally
-        the number of iterations may be set to infinite.
+        Iterations are determined through a dropdown GUI menu, may also be
+        infinite based on a toggled button. This function also serves to
+        create an ordered list of images to be converted into a gif if
+        specified.
 
-        In this function, if save as a gif is selection, the images are
-        grouped into an array.
-        Doing this iteratively preserves the correct order.
-
+        Returns:
+            self.filenames: If save_img == 1, will create a list of image 
+                            filenames.
         """
         if self.inf is False:
             self.num_iter = self.num_iter
@@ -332,71 +368,40 @@ class Model_tk:
             self.create_gif()
 
     def run(self, *args: int) -> None:
-        """
-        Initial setup of the agents and environment. Create a mpl animation.
+        # state initial variables each time run is clicked
+        self.carry_on = True
+        self.current_gen = 0
+        self.police_list = []
+        self.crime_list = []
+        self.environment = environment
 
-        xy coordinates of the agents here are given as a list from a web table
-        td_xs and td_yx.
-        The try: except: blocks prevent errors from occurring before dropdown
-        selection, and indicate to the user what is required.
+        # make the agents
+        for _ in range(self.num_police):
+            self.police_list.append(police.Police(self.bounds))
 
-        """
-        try:
-            # state initial variables each time run is clicked
-            self.carry_on = True
-            self.current_gen = 0
-            self.police_list = []
-            self.crime_list = []
-            self.environment = environment
+        for _ in range(self.num_crime):
+            self.crime_list.append(
+                crime.Crime(self.bounds, self.crime_api))
 
-            # make the agents
-            for _ in range(self.num_police):
-                self.police_list.append(police.Police(self.bounds))
-
-            for _ in range(self.num_crime):
-                self.crime_list.append(
-                    crime.Crime(self.bounds, self.crime_api))
-
-            animation = anim.FuncAnimation(  # noqa (animation unused)
-            fig, self.update, frames=self.gen_function, repeat=False
-                )
-
-            self.canvas.draw()
-        except:  # noqa don't know why this doesn't comply with pep
-            print("Error: First choose parameters from dropdowns.")
+        animation = anim.FuncAnimation(  # noqa (animation unused)
+        self.fig, self.update, frames=self.gen_function, repeat=False
+            )
+        self.canvas.draw()
 
     def resume(self) -> None:
-        """
-        Allow for resuming from current iteration after stopping the model
-
-        """
         if (self.current_gen < self.var_iter.get() or self.inf is True):
             self.carry_on = True
             animation = anim.FuncAnimation(  # noqa
-                fig, self.update, frames=self.gen_function, repeat=False
+                self.fig, self.update, frames=self.gen_function, repeat=False
             )
             self.canvas.draw()
         else:
             print("Cannot run the model! Check Parameters.")
 
     def stop(self) -> None:
-        """
-        Immediately stop the model, displaying the current generation.
-
-        """
         self.carry_on = False
 
     def toggle_inf(self, *args: int) -> None:
-        """
-        Allow a button to hold a sunken position to indicate toggling of a
-        parameter.
-
-        This merely changes the variable self.inf to 1 and allows the model
-        to resume.
-
-        :param args: Values associated with the dropdown selections
-        :type args: tk.IntVar()
-        """
         if self.inf_btn.config('relief')[-1] == 'sunken':
             self.inf_btn.config(relief="raised")
             print("Running", self.var_iter.get(), "iterations.")
@@ -412,12 +417,6 @@ class Model_tk:
             print("Cannot run infinite iteraions and save as GIF!")
 
     def toggle_save(self) -> None:
-        """
-        As with toggle_inf() allows a tkinter button to be sunken.
-
-        Toggles save_img to 1.
-
-        """
         if self.save_btn.config('relief')[-1] == 'sunken':
             self.save_btn.config(relief="raised")
             self.save_img = 0
@@ -427,38 +426,55 @@ class Model_tk:
         else:
             print("Cannot save as GIF and run infinite iterations!")
 
+    def toggle_kde(self, *args: int) -> None:
+        if self.kde_btn.config('relief')[-1] == 'sunken':
+            print("Running", self.var_iter.get(), "iterations.")
+            self.kde = True
+
+        elif self.kde_btn.config("relief")[-1] == 'raised':
+            print("Running kdeinite iterations.")
+            self.kde = False
+
     def create_gif(self) -> None:
-        """
-        Save a GIF of the model from gen 0 to the final generation.
-
-        Uses a list of all images stored during each iteration.
-
-        """
         # get_write and imread allow for a very fast gif creation, despite
         # large files and number
+        print("Creating GIF:", os.getcwd(), "/model.gif")
         with imageio.get_writer("model.gif", mode="I",
                                 duration=0.5) as writer:
             for filename in self.filenames:
                 image = imageio.imread(filename)
                 writer.append_data(image)
                 os.remove(filename)
-        print("Creating GIF:", os.getcwd(), "/model.gif")
+        print("Finished GIF:", os.getcwd(), "/model.gif")
 
     def change(self, *args: int) -> None:
-        """
-        Indicate when parameters and changed and what has changed.
-
-        :param args: Values associated with the dropdown selections
-        :type args: tk.IntVar()
-        """
         print("Options changed.")
         print("Number of Crimes:", self.var_crime.get())
         print("Number of Police:", self.var_police.get())
         print("Number of Iterations:", self.var_iter.get())
+
+    def write_results(self):
+        total_stat = sum(self.environment['stat'])
+        total_pol = len(self.police_list)
+
+        current_crimes = []
+        for c in self.crime_list:
+            if c.solved == 0:
+                current_crimes.append(c)
+        total_crime = len(current_crimes)
+
+        print(total_stat)
+        df = pd.DataFrame({'police': [total_pol],
+                           'crime': [total_crime],
+                           'area_stat': [total_stat]})
+        self.csv_data = self.csv_data.append(df)
+
+        if self.current_gen + 1 == self.num_iter:
+            self.csv_data.to_csv("./data/total_data.csv", index=False)
 
 
 root = tk.Tk()
 gui = Model_tk(root, bounds, environment)
 root.resizable(False, False)
 # to write docs this cannot be uncommented
-#root.mainloop()
+root.mainloop()

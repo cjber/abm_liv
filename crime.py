@@ -11,9 +11,9 @@ class Crime:
         self.solved = 0
 
         while True:
-            i = random.randint(0, len(crime_api))
-            x = crime_api['longitude'].loc[i]
-            y = crime_api['latitude'].loc[i]
+            i = random.randint(0, len(crime_api) - 1)
+            x = crime_api['x'].loc[i]
+            y = crime_api['y'].loc[i]
 
             df = pd.DataFrame({'x': [x], 'y': [y]})
             geom = gpd.points_from_xy(df.x, df.y)
@@ -35,6 +35,6 @@ class Crime:
         for pol in police_list:
             distance = float(self.distance_between(pol))
             if random.random() < 0.5:
-                if distance < 0.01:
+                if distance < 500:
                     self.col = "Green"
                     self.solved = 1

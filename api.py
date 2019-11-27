@@ -31,6 +31,7 @@ coords = ':'.join(map(str, coords))
 months = pd.date_range('2018-02-01', '2018-02-01',
                        freq='MS').strftime("%Y-%m").tolist()
 
+print('Retrieving Crime coordinates from data.police.uk API...')
 # base police API url
 url = "https://data.police.uk/api/crimes-street/all-crime"
 
@@ -40,10 +41,12 @@ response = requests.get(url +
                         "&date=" +
                         random.choice(months))
 
+print('Request sent.')
 if response.status_code != 200:
     print("API lookup fail; using cached data.")
-    data = pd.read_csv("./data/crime_cached.csv")
+    df = pd.read_csv("./data/crime_cached.csv")
 else:
+    print("API lookup successful!")
     response = response.json()
     data = json_normalize(response)
     data = data[['category', 'location.latitude', 'location.longitude']]
@@ -52,5 +55,15 @@ else:
     data = data.dropna()
     data['latitude'] = data['latitude'].astype(float)
     data['longitude'] = data['longitude'].astype(float)
+    x = data['longitude']
+    y = data['latitude']
 
-    data.to_csv("./data/crime_cached.csv", index=False)
+    df = pd.DataFrame({'x': x, 'y': y})
+    geom = gpd.points_from_xy(df.x, df.y)
+    gdf = gpd.GeoDataFrame(df, geometry=geom)
+    gdf.crs = {'init': 'epsg:4326'}
+    gdf = gdf.to_crs({'init': 'epsg:27700'})
+
+
+    df = pd.DataFrame({'x': gdf.geometry.x, 'y': gdf.geometry.y})
+    df.to_csv("./data/crime_cached.csv", index=False)
