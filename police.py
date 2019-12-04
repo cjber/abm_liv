@@ -1,10 +1,23 @@
 import geopandas as gpd
 import random
 import pandas as pd
+import crime
+
+from typing import List
 
 
 class Police:
-    def __init__(self, bounds):
+    def __init__(self, bounds: gpd.GeoDataFrame):
+        """Initial stat and variables for the police agents.
+
+        Takes the bounds input which determines where agents may be created.
+        Agents may be spawned within the extent of bounds, but to determine
+        whether they fall within a bounds polygon this must be checked with a
+        geographic function gpd.within().
+
+        Args:
+            bounds (gpd.GeoDataFrame): GeoDataFrame with the input polygon.
+        """
         self.bounds = bounds
 
         x_min, y_min, x_max, y_max = self.bounds.total_bounds
@@ -23,13 +36,35 @@ class Police:
                 self.geom = gdf['geometry']
                 break
 
-    def distance_between(self, agent) -> int:
+    def distance_between(self, agent: crime.Crime) -> int:
+        """Euclidean distance between two geographic points.
+
+         The output represents the distance referring to the geographic 
+         unit of the projection used.
+
+        Args:
+            agent (crime.Crime): A crime object with the attributes x and y. Must
+            be the same projection as self.
+
+        Returns:
+            int: Returns a float value of distance using the projection values.
+        """
         distance = ((self.x - agent.x)**2 +
                     (self.y - agent.y)**2)**0.5
         distance = float(distance)
         return(distance)
 
     def move(self, crime):
+        """Move the police semi randomly, head in direction of crimes.
+
+        Police agents will move in a random direction each iteration.
+        For each solved crime, if the police moves to an area that is further
+        away than its previous position to a crime it will not move.
+
+        Args:
+            crime (List[crime.Crime]): List of crime 'agents' with x and y
+            coordinates
+        """
         crime_list = []
         for c in crime:
             if c.solved == 0:
@@ -41,7 +76,7 @@ class Police:
                 for c in crime_list:
                     cur_dist.append(self.distance_between(c))
                 cur_dist = min(cur_dist)
-                #print(cur_dist)
+                # print(cur_dist)
                 if random.random() < 0.5:
                     self.x = (self.x + 1000)
                     dist = []

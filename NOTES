@@ -1,8 +1,6 @@
 Create UML:
 
-pyreverse api.py police.py crime.py main.py
-dot -Tpng classes.dot > classes.png
-dot -Tpng packages.dot > packages.png
+pyreverse api.py police.py crime.py main.py -o png
 
 Build HTML:
 

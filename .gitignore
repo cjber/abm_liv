@@ -1,1 +1,5 @@
-/data/
+/*/
+*.rst
+conf.py
+*.css
+*.png

@@ -44,9 +44,6 @@ class Model_tk:
             environment (gpd.GeoDataFrame): A geographic dataframe of 
                                             multipolygons derived from the 
                                             bounds.
-
-        Returns:
-            None: Returns only the tkinter GUI when the python script is ran.
         """
 
         # variables set externally
@@ -89,9 +86,6 @@ class Model_tk:
         # variables for saving models
         self.save_img = 0
         self.filenames: List[str] = []
-
-        # variable for kde plots
-        self.kde = 0
 
         # tkinter interactive buttons etc, very large section ending line 233
         # generally assigning functions to buttons, and button positioning
@@ -180,15 +174,6 @@ class Model_tk:
                           padx=5,
                           pady=5)
 
-        self.kde_btn = tk.Button(
-            self.frame_widgets,
-            text="kdeinite",
-            command=self.toggle_kde)
-        self.kde_btn.grid(row=0,
-                          column=5,
-                          padx=5,
-                          pady=5)
-
         self.save_btn = tk.Button(
             self.frame_widgets,
             text="Save as GIF",
@@ -209,7 +194,6 @@ class Model_tk:
         self.carry_on: bool = True
         self.current_gen: int = 0
         self.inf: bool = False
-        self.kde: bool = False
         self.num_crime: int = self.var_crime.get()
         self.num_police: int = self.var_police.get()
         self.num_iter: int = self.var_iter.get()
@@ -223,9 +207,6 @@ class Model_tk:
 
         Args:
             args (int): Values derived from the GUI dropdown menus.
-
-        Returns:
-            None: The updated agents are displayed on a figure.
         """
         ax = self.ax
         plt.xlim(self.extent['minx'][0], self.extent['maxx'][0])
@@ -289,18 +270,9 @@ class Model_tk:
         # plot each agent on the input environment
         self.bounds.plot(ax=ax, facecolor="white", edgecolor="none")
 
-        if not self.kde:
-            self.environment.plot(ax=ax, column='stat', cmap='RdYlGn',
-                                  edgecolor="white", linewidth=1,
-                                  vmin=-10, vmax=10)
-        # TODO: add toggle option for these
-        if self.kde:
-            if len(cri) > 2:
-                sns.kdeplot(cri.x, cri.y, ax=ax, shade=True,
-                            cmap='Reds', alpha=.5)
-
-            sns.kdeplot(pol.x, pol.y, ax=ax, shade=True,
-                        cmap='Blues', alpha=.5)
+        self.environment.plot(ax=ax, column='stat', cmap='RdYlGn',
+                              edgecolor="white", linewidth=1,
+                              vmin=-10, vmax=10)
 
         for p in self.police_list:
             ax.scatter(p.x, p.y, facecolor="Blue", edgecolors="Green")
@@ -330,9 +302,6 @@ class Model_tk:
 
         Args:
             args (int): Values derived from the dropdown menus.
-
-        Returns:
-            None: Variables for starting numbers of agents and iterations.
         """
         self.num_crime = self.var_crime.get()
         self.num_police = self.var_police.get()
@@ -368,6 +337,15 @@ class Model_tk:
             self.create_gif()
 
     def run(self, *args: int) -> None:
+        """Initial setup of the agents and environment. Create animation.
+
+        Police agents are created randomly inside the polygon bounds.
+        Crime agents are selected randomly from the data.police.uk api from
+        within the bounds specified.
+
+        Args:
+            args (int): Values derived from the dropdown menus.
+        """
         # state initial variables each time run is clicked
         self.carry_on = True
         self.current_gen = 0
@@ -389,6 +367,12 @@ class Model_tk:
         self.canvas.draw()
 
     def resume(self) -> None:
+        """Allow the model to resume after being paused. Does not reset.
+
+        Unlike run this function allows the model to resume after being
+        stopped. This is useful for changing the number of agents or
+        iterations without resetting the model.
+        """
         if (self.current_gen < self.var_iter.get() or self.inf is True):
             self.carry_on = True
             animation = anim.FuncAnimation(  # noqa
@@ -399,9 +383,25 @@ class Model_tk:
             print("Cannot run the model! Check Parameters.")
 
     def stop(self) -> None:
+        """Stop the model.
+
+        This works more like a pause, the model may be resumed with "resume"
+        but if "run" is clicked the model is reset.
+        """
         self.carry_on = False
 
     def toggle_inf(self, *args: int) -> None:
+        """Allow for a infinite number of iterations.
+
+        Utilised a toggle button "hack" in tkinter to allow a button once
+        pressed to stay pressed.
+
+        The toggle inf may not be recessed at the same time as save as gif
+        is selected. Infinite iterations are defined in the generation function.
+
+        Args:
+            args (int): Variables derived from the dropdowns.
+        """
         if self.inf_btn.config('relief')[-1] == 'sunken':
             self.inf_btn.config(relief="raised")
             print("Running", self.var_iter.get(), "iterations.")
@@ -417,6 +417,11 @@ class Model_tk:
             print("Cannot run infinite iteraions and save as GIF!")
 
     def toggle_save(self) -> None:
+        """Allows for all frames of the model to be saved as a gif.
+
+        Similarly uses the tkinter button "hack", prevents infinite iterations.
+        Button function to allow saving as a gif.
+        """
         if self.save_btn.config('relief')[-1] == 'sunken':
             self.save_btn.config(relief="raised")
             self.save_img = 0
@@ -426,16 +431,12 @@ class Model_tk:
         else:
             print("Cannot save as GIF and run infinite iterations!")
 
-    def toggle_kde(self, *args: int) -> None:
-        if self.kde_btn.config('relief')[-1] == 'sunken':
-            print("Running", self.var_iter.get(), "iterations.")
-            self.kde = True
-
-        elif self.kde_btn.config("relief")[-1] == 'raised':
-            print("Running kdeinite iterations.")
-            self.kde = False
-
     def create_gif(self) -> None:
+        """Read in list of jpg files, save as a gif.
+
+        Filenames are determined as the model is ran, to ensure they are
+        ordered.
+        """
         # get_write and imread allow for a very fast gif creation, despite
         # large files and number
         print("Creating GIF:", os.getcwd(), "/model.gif")
@@ -448,12 +449,28 @@ class Model_tk:
         print("Finished GIF:", os.getcwd(), "/model.gif")
 
     def change(self, *args: int) -> None:
+        """Indicates the present user selection.
+
+        Gives the current number of crimes, police and iterations taken
+        directly from the dropdown menu variables.
+
+        Args:
+            args (int): Variables derived from the dropdown menus.
+        """
         print("Options changed.")
         print("Number of Crimes:", self.var_crime.get())
         print("Number of Police:", self.var_police.get())
         print("Number of Iterations:", self.var_iter.get())
 
     def write_results(self):
+        """Takes results generated every iteration and writes to a csv.
+
+        Results include:
+            Iteration number,
+            Total 'stat' value across all squares,
+            Total number of police,
+            Total number of crimes.
+        """
         total_stat = sum(self.environment['stat'])
         total_pol = len(self.police_list)
 
