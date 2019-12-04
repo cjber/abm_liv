@@ -1,5 +1,7 @@
-/*/
+/data/
+/_*/
 *.rst
 conf.py
 *.css
 *.png
+NOTES
