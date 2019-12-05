@@ -4,9 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>police module &#8212; abm_liv 0.0.1 documentation</title>
+    <title>police module &#8212; abm_liv  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -34,11 +35,11 @@
 <span id="police-module"></span><h1>police module<a class="headerlink" href="#module-police" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="police.Police">
-<em class="property">class </em><code class="sig-prename descclassname">police.</code><code class="sig-name descname">Police</code><span class="sig-paren">(</span><em class="sig-param">bounds: geopandas.geodataframe.GeoDataFrame</em><span class="sig-paren">)</span><a class="headerlink" href="#police.Police" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">police.</code><code class="sig-name descname">Police</code><span class="sig-paren">(</span><em class="sig-param">bounds: geopandas.geodataframe.GeoDataFrame</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/police.html#Police"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#police.Police" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="police.Police.distance_between">
-<code class="sig-name descname">distance_between</code><span class="sig-paren">(</span><em class="sig-param">agent</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#police.Police.distance_between" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">distance_between</code><span class="sig-paren">(</span><em class="sig-param">agent</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="_modules/police.html#Police.distance_between"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#police.Police.distance_between" title="Permalink to this definition">¶</a></dt>
 <dd><p>Euclidean distance between two geographic points.</p>
 <blockquote>
 <div><p>The output represents the distance referring to the geographic 
@@ -55,7 +56,7 @@ be the same projection as self.</p>
 
 <dl class="method">
 <dt id="police.Police.move">
-<code class="sig-name descname">move</code><span class="sig-paren">(</span><em class="sig-param">crime</em><span class="sig-paren">)</span><a class="headerlink" href="#police.Police.move" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">move</code><span class="sig-paren">(</span><em class="sig-param">crime</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/police.html#Police.move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#police.Police.move" title="Permalink to this definition">¶</a></dt>
 <dd><p>Move the police semi randomly, head in direction of crimes.</p>
 <p>Police agents will move in a random direction each iteration.
 For each solved crime, if the police moves to an area that is further
@@ -81,6 +82,8 @@ coordinates</p>
 <h1 class="logo"><a href="index.html">abm_liv</a></h1>
 
 
+
+<p class="blurb">An agent based model framework, written in python and providing GUI features through Tkinter.</p>
 
 
 

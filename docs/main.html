@@ -4,9 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>main module &#8212; abm_liv 0.0.1 documentation</title>
+    <title>main module &#8212; abm_liv  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -34,11 +35,11 @@
 <span id="main-module"></span><h1>main module<a class="headerlink" href="#module-main" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="main.Model_tk">
-<em class="property">class </em><code class="sig-prename descclassname">main.</code><code class="sig-name descname">Model_tk</code><span class="sig-paren">(</span><em class="sig-param">master: tkinter.Tk</em>, <em class="sig-param">bounds: geopandas.geodataframe.GeoDataFrame</em>, <em class="sig-param">environment: geopandas.geodataframe.GeoDataFrame</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Model_tk" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">main.</code><code class="sig-name descname">Model_tk</code><span class="sig-paren">(</span><em class="sig-param">master: tkinter.Tk</em>, <em class="sig-param">bounds: geopandas.geodataframe.GeoDataFrame</em>, <em class="sig-param">environment: geopandas.geodataframe.GeoDataFrame</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#Model_tk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="main.Model_tk.change">
-<code class="sig-name descname">change</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.change" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">change</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.change" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates the present user selection.</p>
 <p>Gives the current number of crimes, police and iterations taken
 directly from the dropdown menu variables.</p>
@@ -50,7 +51,7 @@ directly from the dropdown menu variables.</p>
 
 <dl class="method">
 <dt id="main.Model_tk.create_gif">
-<code class="sig-name descname">create_gif</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.create_gif" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_gif</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.create_gif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.create_gif" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read in list of jpg files, save as a gif.</p>
 <p>Filenames are determined as the model is ran, to ensure they are
 ordered.</p>
@@ -58,7 +59,7 @@ ordered.</p>
 
 <dl class="method">
 <dt id="main.Model_tk.gen_function">
-<code class="sig-name descname">gen_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.gen_function" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">gen_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.gen_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.gen_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stop iterations based on the selection.</p>
 <p>Iterations are determined through a dropdown GUI menu, may also be
 infinite based on a toggled button. This function also serves to
@@ -75,7 +76,7 @@ specified.</p>
 
 <dl class="method">
 <dt id="main.Model_tk.initial_vars">
-<code class="sig-name descname">initial_vars</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.initial_vars" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">initial_vars</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.initial_vars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.initial_vars" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves values from GUI dropdown menus.</p>
 <p>Function required to obtain initial values of dropdown menus.</p>
 <dl class="simple">
@@ -86,7 +87,7 @@ specified.</p>
 
 <dl class="method">
 <dt id="main.Model_tk.resume">
-<code class="sig-name descname">resume</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.resume" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">resume</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.resume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.resume" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allow the model to resume after being paused. Does not reset.</p>
 <p>Unlike run this function allows the model to resume after being
 stopped. This is useful for changing the number of agents or
@@ -95,7 +96,7 @@ iterations without resetting the model.</p>
 
 <dl class="method">
 <dt id="main.Model_tk.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initial setup of the agents and environment. Create animation.</p>
 <p>Police agents are created randomly inside the polygon bounds.
 Crime agents are selected randomly from the data.police.uk api from
@@ -108,7 +109,7 @@ within the bounds specified.</p>
 
 <dl class="method">
 <dt id="main.Model_tk.stop">
-<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.stop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stop the model.</p>
 <p>This works more like a pause, the model may be resumed with “resume”
 but if “run” is clicked the model is reset.</p>
@@ -116,7 +117,7 @@ but if “run” is clicked the model is reset.</p>
 
 <dl class="method">
 <dt id="main.Model_tk.toggle_inf">
-<code class="sig-name descname">toggle_inf</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.toggle_inf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">toggle_inf</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.toggle_inf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.toggle_inf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allow for a infinite number of iterations.</p>
 <p>Utilised a toggle button “hack” in tkinter to allow a button once
 pressed to stay pressed.</p>
@@ -130,7 +131,7 @@ is selected. Infinite iterations are defined in the generation function.</p>
 
 <dl class="method">
 <dt id="main.Model_tk.toggle_save">
-<code class="sig-name descname">toggle_save</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.toggle_save" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">toggle_save</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.toggle_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.toggle_save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allows for all frames of the model to be saved as a gif.</p>
 <p>Similarly uses the tkinter button “hack”, prevents infinite iterations.
 Button function to allow saving as a gif.</p>
@@ -138,7 +139,7 @@ Button function to allow saving as a gif.</p>
 
 <dl class="method">
 <dt id="main.Model_tk.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Produce output for matplotlib animation, with agents as input.</p>
 <p>Takes police and crime agents from external modules, runs the local
 class functions, and produces a matplotlib figure with the updated
@@ -151,7 +152,7 @@ agents.</p>
 
 <dl class="method">
 <dt id="main.Model_tk.write_results">
-<code class="sig-name descname">write_results</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.Model_tk.write_results" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_results</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#Model_tk.write_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.write_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes results generated every iteration and writes to a csv.</p>
 <dl class="simple">
 <dt>Results include:</dt><dd><p>Iteration number,
@@ -176,6 +177,8 @@ Total number of crimes.</p>
 <h1 class="logo"><a href="index.html">abm_liv</a></h1>
 
 
+
+<p class="blurb">An agent based model framework, written in python and providing GUI features through Tkinter.</p>
 
 
 

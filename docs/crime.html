@@ -4,9 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>crime module &#8212; abm_liv 0.0.1 documentation</title>
+    <title>crime module &#8212; abm_liv  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -34,11 +35,11 @@
 <span id="crime-module"></span><h1>crime module<a class="headerlink" href="#module-crime" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="crime.Crime">
-<em class="property">class </em><code class="sig-prename descclassname">crime.</code><code class="sig-name descname">Crime</code><span class="sig-paren">(</span><em class="sig-param">bounds: geopandas.geodataframe.GeoDataFrame</em>, <em class="sig-param">crime_api: pandas.core.frame.DataFrame</em><span class="sig-paren">)</span><a class="headerlink" href="#crime.Crime" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">crime.</code><code class="sig-name descname">Crime</code><span class="sig-paren">(</span><em class="sig-param">bounds: geopandas.geodataframe.GeoDataFrame</em>, <em class="sig-param">crime_api: pandas.core.frame.DataFrame</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/crime.html#Crime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crime.Crime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="crime.Crime.distance_between">
-<code class="sig-name descname">distance_between</code><span class="sig-paren">(</span><em class="sig-param">agent: police.Police</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#crime.Crime.distance_between" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">distance_between</code><span class="sig-paren">(</span><em class="sig-param">agent: police.Police</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="_modules/crime.html#Crime.distance_between"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crime.Crime.distance_between" title="Permalink to this definition">¶</a></dt>
 <dd><p>Euclidean distance between two geographic points.</p>
 <p>The output represents the distance referring to the geographic unit
 of the projection used.</p>
@@ -52,7 +53,7 @@ of the projection used.</p>
 
 <dl class="method">
 <dt id="crime.Crime.solve">
-<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">police_list</em><span class="sig-paren">)</span><a class="headerlink" href="#crime.Crime.solve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">police_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/crime.html#Crime.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crime.Crime.solve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Solve a crime by proximity to police.</p>
 <p>A crime is determined to be solved if within a specified distance from
 a police officer, and given a random 50% chance.</p>
@@ -76,6 +77,8 @@ a police officer, and given a random 50% chance.</p>
 <h1 class="logo"><a href="index.html">abm_liv</a></h1>
 
 
+
+<p class="blurb">An agent based model framework, written in python and providing GUI features through Tkinter.</p>
 
 
 
