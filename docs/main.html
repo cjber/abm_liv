@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>main module &#8212; abm_liv 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-main">
+<span id="main-module"></span><h1>main module<a class="headerlink" href="#module-main" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="main.Model_tk">
+<em class="property">class </em><code class="sig-prename descclassname">main.</code><code class="sig-name descname">Model_tk</code><span class="sig-paren">(</span><em class="sig-param">master: tkinter.Tk</em>, <em class="sig-param">bounds: geopandas.geodataframe.GeoDataFrame</em>, <em class="sig-param">environment: geopandas.geodataframe.GeoDataFrame</em><span class="sig-paren">)</span><a class="headerlink" href="#main.Model_tk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="main.Model_tk.change">
+<code class="sig-name descname">change</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates the present user selection.</p>
+<p>Gives the current number of crimes, police and iterations taken
+directly from the dropdown menu variables.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (int): Variables derived from the dropdown menus.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.create_gif">
+<code class="sig-name descname">create_gif</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.create_gif" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read in list of jpg files, save as a gif.</p>
+<p>Filenames are determined as the model is ran, to ensure they are
+ordered.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.gen_function">
+<code class="sig-name descname">gen_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.gen_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop iterations based on the selection.</p>
+<p>Iterations are determined through a dropdown GUI menu, may also be
+infinite based on a toggled button. This function also serves to
+create an ordered list of images to be converted into a gif if
+specified.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>self.filenames: If save_img == 1, will create a list of image </dt><dd><p>filenames.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.initial_vars">
+<code class="sig-name descname">initial_vars</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.initial_vars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves values from GUI dropdown menus.</p>
+<p>Function required to obtain initial values of dropdown menus.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (int): Values derived from the dropdown menus.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.resume">
+<code class="sig-name descname">resume</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.resume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow the model to resume after being paused. Does not reset.</p>
+<p>Unlike run this function allows the model to resume after being
+stopped. This is useful for changing the number of agents or
+iterations without resetting the model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial setup of the agents and environment. Create animation.</p>
+<p>Police agents are created randomly inside the polygon bounds.
+Crime agents are selected randomly from the data.police.uk api from
+within the bounds specified.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (int): Values derived from the dropdown menus.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the model.</p>
+<p>This works more like a pause, the model may be resumed with “resume”
+but if “run” is clicked the model is reset.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.toggle_inf">
+<code class="sig-name descname">toggle_inf</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.toggle_inf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow for a infinite number of iterations.</p>
+<p>Utilised a toggle button “hack” in tkinter to allow a button once
+pressed to stay pressed.</p>
+<p>The toggle inf may not be recessed at the same time as save as gif
+is selected. Infinite iterations are defined in the generation function.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (int): Variables derived from the dropdowns.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.toggle_save">
+<code class="sig-name descname">toggle_save</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.toggle_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows for all frames of the model to be saved as a gif.</p>
+<p>Similarly uses the tkinter button “hack”, prevents infinite iterations.
+Button function to allow saving as a gif.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#main.Model_tk.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce output for matplotlib animation, with agents as input.</p>
+<p>Takes police and crime agents from external modules, runs the local
+class functions, and produces a matplotlib figure with the updated
+agents.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (int): Values derived from the GUI dropdown menus.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.write_results">
+<code class="sig-name descname">write_results</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.Model_tk.write_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes results generated every iteration and writes to a csv.</p>
+<dl class="simple">
+<dt>Results include:</dt><dd><p>Iteration number,
+Total ‘stat’ value across all squares,
+Total number of police,
+Total number of crimes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">abm_liv</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Cillian Berragan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/main.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
