@@ -5,7 +5,7 @@ import requests
 import random
 from pandas.io.json import json_normalize
 
-bounds = gpd.read_file("./data/liv_shp/Liverpool_lsoa11.shp")
+bounds = gpd.read_file("./data/bounds.gpkg")
 bounds['dissolve'] = 1
 bounds = bounds.dissolve(by='dissolve')
 bounds = bounds.to_crs({'init': 'epsg:4326'})
@@ -25,7 +25,7 @@ coords = [','.join(map(str, bounds[0:2])), ','.join(map(str, bounds[2:4])),
 
 index = [3, 1, 2, 0]
 coords = [coords[i] for i in index]
-coords = ':'.join(map(str, coords))
+coords_str = ':'.join(map(str, coords))
 
 
 months = pd.date_range('2018-02-01', '2018-02-01',
@@ -37,7 +37,7 @@ url = "https://data.police.uk/api/crimes-street/all-crime"
 
 response = requests.get(url +
                         "?poly=" +
-                        coords +
+                        coords_str +
                         "&date=" +
                         random.choice(months))
 

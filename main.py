@@ -12,14 +12,16 @@ import seaborn as sns
 import pandas as pd
 import random
 
-# ensure that when updating my own imports they are updated here as well
+from memory_profiler import profile
+
+# local imports
 import crime
 import police
 import api
 
-bounds = gpd.read_file("./data/liverpool_bounds_fixed.gpkg")
+bounds = gpd.read_file("./data/bounds.gpkg")
 #bounds = bounds.to_crs({'init': 'epsg:4326'})
-environment = gpd.read_file("./data/liv_grid.shp")
+environment = gpd.read_file("./data/grid.shp")
 #environment = environment.to_crs({'init': 'epsg:4326'})
 environment['stat'] = 0
 
@@ -198,6 +200,8 @@ class Model_tk:
         self.num_police: int = self.var_police.get()
         self.num_iter: int = self.var_iter.get()
 
+
+    # @profile
     def update(self, *args: int) -> None:
         """Produce output for matplotlib animation, with agents as input.
 
@@ -207,6 +211,15 @@ class Model_tk:
 
         Args:
             args (int): Values derived from the GUI dropdown menus.
+
+        ##### Bugs
+        Memory profile reveals every iteration with default settings gives 
+        ~3mb increase in memory usage.
+        
+        Matplot lib when using polygon data cannot clear plot every run
+        this appears to cause performance issues as >10 iterations will 
+        eventually stop rendering plots. I cannot find a solution to this.
+
         """
         ax = self.ax
         plt.xlim(self.extent['minx'][0], self.extent['maxx'][0])
@@ -494,4 +507,4 @@ root = tk.Tk()
 gui = Model_tk(root, bounds, environment)
 root.resizable(False, False)
 # to write docs this cannot be uncommented
-#root.mainloop()
+root.mainloop()

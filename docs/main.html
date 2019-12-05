@@ -148,6 +148,12 @@ agents.</p>
 <dt>Args:</dt><dd><p>args (int): Values derived from the GUI dropdown menus.</p>
 </dd>
 </dl>
+<p>##### Bugs
+Memory profile reveals every iteration with default settings gives 
+~3mb increase in memory usage.</p>
+<p>Matplot lib when using polygon data cannot clear plot every run
+this appears to cause performance issues as &gt;10 iterations will 
+eventually stop rendering plots. I cannot find a solution to this.</p>
 </dd></dl>
 
 <dl class="method">

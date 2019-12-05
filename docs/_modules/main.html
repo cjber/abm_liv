@@ -46,14 +46,16 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">random</span>
 
-<span class="c1"># ensure that when updating my own imports they are updated here as well</span>
+<span class="kn">from</span> <span class="nn">memory_profiler</span> <span class="k">import</span> <span class="n">profile</span>
+
+<span class="c1"># local imports</span>
 <span class="kn">import</span> <span class="nn">crime</span>
 <span class="kn">import</span> <span class="nn">police</span>
 <span class="kn">import</span> <span class="nn">api</span>
 
-<span class="n">bounds</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;./data/liverpool_bounds_fixed.gpkg&quot;</span><span class="p">)</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;./data/bounds.gpkg&quot;</span><span class="p">)</span>
 <span class="c1">#bounds = bounds.to_crs({&#39;init&#39;: &#39;epsg:4326&#39;})</span>
-<span class="n">environment</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;./data/liv_grid.shp&quot;</span><span class="p">)</span>
+<span class="n">environment</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;./data/grid.shp&quot;</span><span class="p">)</span>
 <span class="c1">#environment = environment.to_crs({&#39;init&#39;: &#39;epsg:4326&#39;})</span>
 <span class="n">environment</span><span class="p">[</span><span class="s1">&#39;stat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -232,6 +234,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_police</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_police</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_iter</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 
+
+    <span class="c1"># @profile</span>
 <div class="viewcode-block" id="Model_tk.update"><a class="viewcode-back" href="../main.html#main.Model_tk.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Produce output for matplotlib animation, with agents as input.</span>
 
@@ -241,6 +245,15 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            args (int): Values derived from the GUI dropdown menus.</span>
+
+<span class="sd">        ##### Bugs</span>
+<span class="sd">        Memory profile reveals every iteration with default settings gives </span>
+<span class="sd">        ~3mb increase in memory usage.</span>
+<span class="sd">        </span>
+<span class="sd">        Matplot lib when using polygon data cannot clear plot every run</span>
+<span class="sd">        this appears to cause performance issues as &gt;10 iterations will </span>
+<span class="sd">        eventually stop rendering plots. I cannot find a solution to this.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;minx&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;maxx&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
