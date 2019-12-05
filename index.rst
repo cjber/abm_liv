@@ -15,6 +15,15 @@ Indices and tables
 Developer Guide
 ===============
 
+Quick Reference
+---------------
+
+Basic steps to setup for personal or to contribute to the project.
+
+1. Git
+2. Fork
+3. Install dependencies
+
 * Adding to the model
 * Using a different base polygon
 * etc.
