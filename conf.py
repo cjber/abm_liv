@@ -100,7 +100,7 @@ html_theme_options = {
     'link': '#1656a9',
     'sidebar_search_button': '#09121a',
     'code_highlight': '#080f14',
-    'code_font_size': '12px'
+    'code_font_size': '14px'
 }
 
 html_css_files = [
