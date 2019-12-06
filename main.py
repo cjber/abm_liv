@@ -507,4 +507,4 @@ root = tk.Tk()
 gui = Model_tk(root, bounds, environment)
 root.resizable(False, False)
 # to write docs this cannot be uncommented
-root.mainloop()
+#root.mainloop()

@@ -1,13 +1,15 @@
 import geopandas as gpd
 import pandas as pd
 import requests
-
 import random
 from pandas.io.json import json_normalize
 
+# read in bounds poly
 bounds = gpd.read_file("./data/bounds.gpkg")
+# if required dissolve into a single polygon
 bounds['dissolve'] = 1
 bounds = bounds.dissolve(by='dissolve')
+# use mercator projection
 bounds = bounds.to_crs({'init': 'epsg:4326'})
 
 # create vector of liv bbox

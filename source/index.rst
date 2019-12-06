@@ -6,7 +6,11 @@
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+    index
+
 .. _abm_liv: https://github.com/cjber/abm_liv
+
 .. role:: bash(code)
    :language: bash
 
@@ -33,7 +37,9 @@ Here are the basic steps required to contribute to existing code.
     git clone https://github.com/<your_username>/abm_liv
     cd abm_liv
 
-3. Run tests?
+3. Look at the `Known Bugs`_ section to get inspiration for code contributions.
+
+4. Submit a pull request to GitHub.
 
 
 Customising the Code
@@ -46,6 +52,8 @@ The program has been written to provide several simplistic methods for customisa
    - The :bash:`bounds` variable reads a shapefile called :bash:`bounds.gpkg` contained within the :bash:`data` directory. This file may be changed by placing a different Geopackage polygon in this location with a matching name. Note that for the model to run, the :bash:`data_clean.py` script must be ran first.
 
    - Additionally, a :bash:`*.shp` polygon may be used, but the name and location must be edited when the :bash:`bounds` variable is assigned in both the :bash:`main.py`, :bash:`data_clean.py` and :bash:`api.py` scripts.
+
+   - `NOTE:` Ensure that projections are correct when reading in new shapefiles. The default crs used is British National Grid (EPSG: 27700). Police api data comes with a mercator projection (EPSG: 4326).
 
 * Adding Class level functions.
    - Additional functions may be added to either the :bash:`crime.py` or :bash:`police.py` scripts. These should be contained within the respective class and appended below existing functions.
@@ -62,4 +70,7 @@ This would cause a crime to randomly move a small distance every so often. This 
     for c in self.crime_list:
         c.solve(self.police_list)
 
+Known Bugs
+----------
 
+1. At present the plot cannot be cleared with every iteration. If :bash:`fig.clear()` or equivalent is added to the :bash:`update` function, the plot will never render. This causes severe performance issues when more than 10 iterations are used.

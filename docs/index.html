@@ -55,7 +55,8 @@
 </pre></div>
 </div>
 </li>
-<li><p>Run tests?</p></li>
+<li><p>Look at the <a class="reference internal" href="#known-bugs">Known Bugs</a> section to get inspiration for code contributions.</p></li>
+<li><p>Submit a pull request to GitHub.</p></li>
 </ol>
 </div>
 <div class="section" id="customising-the-code">
@@ -67,6 +68,7 @@
 <div><ul class="simple">
 <li><p>The <code class="code bash docutils literal notranslate"><span class="pre">bounds</span></code> variable reads a shapefile called <code class="code bash docutils literal notranslate"><span class="pre">bounds.gpkg</span></code> contained within the <code class="code bash docutils literal notranslate"><span class="pre">data</span></code> directory. This file may be changed by placing a different Geopackage polygon in this location with a matching name. Note that for the model to run, the <code class="code bash docutils literal notranslate"><span class="pre">data_clean.py</span></code> script must be ran first.</p></li>
 <li><p>Additionally, a <code class="code bash docutils literal notranslate"><span class="pre">*.shp</span></code> polygon may be used, but the name and location must be edited when the <code class="code bash docutils literal notranslate"><span class="pre">bounds</span></code> variable is assigned in both the <code class="code bash docutils literal notranslate"><span class="pre">main.py</span></code>, <code class="code bash docutils literal notranslate"><span class="pre">data_clean.py</span></code> and <code class="code bash docutils literal notranslate"><span class="pre">api.py</span></code> scripts.</p></li>
+<li><p><cite>NOTE:</cite> Ensure that projections are correct when reading in new shapefiles. The default crs used is British National Grid (EPSG: 27700). Police api data comes with a mercator projection (EPSG: 4326).</p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -90,6 +92,12 @@
     <span class="n">c</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">police_list</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="known-bugs">
+<h2>Known Bugs<a class="headerlink" href="#known-bugs" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>At present the plot cannot be cleared with every iteration. If <code class="code bash docutils literal notranslate"><span class="pre">fig.clear</span><span class="operator"><span class="pre">()</span></span></code> or equivalent is added to the <code class="code bash docutils literal notranslate"><span class="pre">update</span></code> function, the plot will never render. This causes severe performance issues when more than 10 iterations are used.</p></li>
+</ol>
 </div>
 </div>
 
