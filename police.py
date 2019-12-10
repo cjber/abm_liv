@@ -1,6 +1,7 @@
 import geopandas as gpd  # geographic data manipulation
 import random  # pseudorandom numbres
 import pandas as pd  # data manipulation
+import crime
 
 from typing import List
 
@@ -43,7 +44,7 @@ class Police:
                 self.geom = gdf['geometry']
                 break
 
-    def distance_between(self, agent) -> int:
+    def distance_between(self, agent: crime.Crime) -> int:
         """Euclidean distance between two geographic points.
 
          The output represents the distance referring to the geographic
