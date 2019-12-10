@@ -17,18 +17,26 @@ class Police:
         Args:
             bounds (gpd.GeoDataFrame): GeoDataFrame with the input polygon.
         """
+        # takes bounds from main.py
         self.bounds = bounds
 
+        # find extent of bounds
         x_min, y_min, x_max, y_max = self.bounds.total_bounds
 
         while True:
+            # random xy from extent of bounds (square)
             self.x = random.uniform(x_min, x_max)
             self.y = random.uniform(y_min, y_max)
+
+            # convert to geodf
             df = pd.DataFrame({'x': [self.x], 'y': [self.y]})
             geom = gpd.points_from_xy(df.x, df.y)
-
             gdf = gpd.GeoDataFrame(df, geometry=geom)
+
+            # check whether point falls within polygon 
             within = int(gdf.within(self.bounds))
+
+            # only keep point if within poly, otherwise repeat random coords
             if within is 1:
                 self.x = gdf['x']
                 self.y = gdf['y']
@@ -53,7 +61,7 @@ class Police:
         distance = float(distance)
         return(distance)
 
-    def random_movement(self, cur_dist: float, crime_list: List["Crime"]):
+    def random_movement(self, cur_dist: float, crime_list: List[int]):
         """
         Create random movement parameters for each agent.
 
@@ -139,7 +147,7 @@ class Police:
             # allow up to 10 times, if over 10 times the police officer is
             # lost outside the bounds
             if i > 10:
-                print("Police officer has left Liverpool.")
+                print("Police officer has left the bounds.")
                 break
             # if within gives true, allow new xy values to the police
             if within is 1:

@@ -19,21 +19,29 @@ class Crime:
             crime_api (pd.DataFrame): xy coordinates for bounds extent from
             police api.
         """
+        # takes bounds from main.py
         self.bounds = bounds
 
+        # initial variables
         self.col = "Red"
         self.solved = 0
 
+        # loop to take random crime point from api that falls within bounds
+        # polygon
         while True:
+            # int for random row
             i = random.randint(0, len(crime_api) - 1)
             x = crime_api['x'].loc[i]
             y = crime_api['y'].loc[i]
 
+            # convert point to geodatafame
             df = pd.DataFrame({'x': [x], 'y': [y]})
             geom = gpd.points_from_xy(df.x, df.y)
-
             gdf = gpd.GeoDataFrame(df, geometry=geom)
+
+            # find if point falls within polygon
             within = int(gdf.within(self.bounds))
+            # while loop breaks only if point is within
             if within is 1:
                 self.x = gdf['x']
                 self.y = gdf['y']
