@@ -1,7 +1,6 @@
 import geopandas as gpd  # geographic data manipulation
 import random  # pseudorandom numbres
 import pandas as pd  # data manipulation
-import crime
 
 from typing import List
 
@@ -38,20 +37,20 @@ class Police:
             within = int(gdf.within(self.bounds))
 
             # only keep point if within poly, otherwise repeat random coords
-            if within is 1:
+            if within == 1:
                 self.x = gdf['x']
                 self.y = gdf['y']
                 self.geom = gdf['geometry']
                 break
 
-    def distance_between(self, agent: crime.Crime) -> int:
+    def distance_between(self, agent) -> int:
         """Euclidean distance between two geographic points.
 
          The output represents the distance referring to the geographic
          unit of the projection used.
 
         Args:
-            agent (crime.Crime): A crime object with the attributes x and y.
+            agent (Crime): A crime object with the attributes x and y.
             Must be the same projection as self.
 
         Returns:
@@ -151,7 +150,7 @@ class Police:
                 print("Police officer has left the bounds.")
                 break
             # if within gives true, allow new xy values to the police
-            if within is 1:
+            if within == 1:
                 self.x = gdf['x']
                 self.y = gdf['y']
                 break

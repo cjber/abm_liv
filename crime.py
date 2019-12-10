@@ -1,7 +1,6 @@
 import pandas as pd
 import geopandas as gpd
 import random
-import police
 
 from typing import List
 
@@ -42,20 +41,20 @@ class Crime:
             # find if point falls within polygon
             within = int(gdf.within(self.bounds))
             # while loop breaks only if point is within
-            if within is 1:
+            if within == 1:
                 self.x = gdf['x']
                 self.y = gdf['y']
                 self.geom = gdf['geometry']
                 break
 
-    def distance_between(self, agent: police.Police) -> int:
+    def distance_between(self, agent) -> int:
         """Euclidean distance between two geographic points.
 
         The output represents the distance referring to the geographic unit
         of the projection used.
 
         Args:
-            agent (police.Police): A police object with coordinates xy.
+            agent (Police): A police object with coordinates xy.
 
         Returns:
             int: Distance with values associated with the projection.
@@ -73,9 +72,9 @@ class Crime:
         Args:
             police_list ([TODO:type]): [TODO:description]
         """
+        # solve a crime if police is within a certain distance
         for pol in police_list:
             distance = float(self.distance_between(pol))
-            if random.random() < 0.5:
-                if distance < 500:
-                    self.col = "Green"
-                    self.solved = 1
+            if distance < 500:
+                self.col = "Green"
+                self.solved = 1
