@@ -67,7 +67,7 @@ create an ordered list of images to be converted into a gif if
 specified.</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><dl class="simple">
-<dt>self.filenames: If save_img == 1, will create a list of image </dt><dd><p>filenames.</p>
+<dt>self.filenames: If save_img == 1, will create a list of image</dt><dd><p>filenames.</p>
 </dd>
 </dl>
 </dd>
@@ -83,6 +83,23 @@ specified.</p>
 <dt>Args:</dt><dd><p>args (int): Values derived from the dropdown menus.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="main.Model_tk.plot_anim">
+<code class="sig-name descname">plot_anim</code><span class="sig-paren">(</span><em class="sig-param">*args: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/main.html#Model_tk.plot_anim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.Model_tk.plot_anim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display each iteration of the model as a matploblib plot</p>
+<p>Uses base polygon with overlayed grid polygons.
+Agents are plotted as a scatter plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>int</em>) – Values derived from the GUI dropdown menus.</p>
+</dd>
+</dl>
+<p>#### BUGS</p>
+<p>Matplotlib when using polygon data cannot clear plot every run
+this appears to cause performance issues as &gt;10 iterations will
+eventually stop rendering plots. I cannot find a solution to this.</p>
 </dd></dl>
 
 <dl class="method">
@@ -122,7 +139,8 @@ but if “run” is clicked the model is reset.</p>
 <p>Utilised a toggle button “hack” in tkinter to allow a button once
 pressed to stay pressed.</p>
 <p>The toggle inf may not be recessed at the same time as save as gif
-is selected. Infinite iterations are defined in the generation function.</p>
+is selected. Infinite iterations are defined in the
+generation function.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>args (int): Variables derived from the dropdowns.</p>
 </dd>
@@ -148,12 +166,9 @@ agents.</p>
 <dt>Args:</dt><dd><p>args (int): Values derived from the GUI dropdown menus.</p>
 </dd>
 </dl>
-<p>##### Bugs
-Memory profile reveals every iteration with default settings gives 
+<p>##### BUGS
+Memory profile reveals every iteration with default settings gives
 ~3mb increase in memory usage.</p>
-<p>Matplot lib when using polygon data cannot clear plot every run
-this appears to cause performance issues as &gt;10 iterations will 
-eventually stop rendering plots. I cannot find a solution to this.</p>
 </dd></dl>
 
 <dl class="method">

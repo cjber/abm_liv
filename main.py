@@ -1,4 +1,4 @@
-from typing import List
+from typing import List  # for mypy type hints
 import tkinter as tk  # gui
 import imageio  # save images and gifs
 import os  # os related functions
@@ -7,28 +7,30 @@ mpl.use('TkAgg')  # noqa, have to load before plt etc.
 import matplotlib.pyplot as plt  # plots function
 import matplotlib.animation as anim  # animated plots
 import matplotlib.backends.backend_tkagg as mpltk  # plot backend for gui
-import geopandas as gpd
-import seaborn as sns
-import pandas as pd
-import random
-
-from memory_profiler import profile
+import geopandas as gpd  # geographic data manipulation
+import pandas as pd  # data manipulation
+import random  # provide pseudorandom numbers
 
 # local imports
 import crime
 import police
 import api
 
+# read in bounds as a polygon
 bounds = gpd.read_file("./data/bounds.gpkg")
-#bounds = bounds.to_crs({'init': 'epsg:4326'})
+# read in grid polygons created by data_clean.py
 environment = gpd.read_file("./data/grid.shp")
-#environment = environment.to_crs({'init': 'epsg:4326'})
+# init base stat value
 environment['stat'] = 0
 
 
 class Model_tk:
     # print some preliminary warnings to consider before running the model
-    print("Select Agents and Iterations from dropdowns...")
+    print(
+        "Select number of crimes," +
+        "number of police" +
+        "and number of iterations from dropdowns..."
+    )
     print("Before running select save as gif, or infinite iterations")
 
     def __init__(self, master: tk.Tk,
@@ -37,14 +39,14 @@ class Model_tk:
         """Define the initial state of the tkinter main window.
 
         Defines initial variables and state for the main tkinter GUI window
-        initialised by a tk.Tk() class given byt he master variable.
+        initialised by a tk.Tk() class given by the master variable.
 
         Args:
             master (tk.Tk): The main GUI window.
             bounds (gpd.GeoDataFrame): A geographic dataframe showing the
                                        area of interest.
-            environment (gpd.GeoDataFrame): A geographic dataframe of 
-                                            multipolygons derived from the 
+            environment (gpd.GeoDataFrame): A geographic dataframe of
+                                            multipolygons derived from the
                                             bounds.
         """
 
@@ -52,7 +54,6 @@ class Model_tk:
         self.master = master
         self.bounds = bounds
         self.environment = environment
-
         self.bounds = self.bounds.geometry
         self.extent = self.bounds.bounds
         self.csv_data = pd.DataFrame()
@@ -63,10 +64,14 @@ class Model_tk:
         self.crime_list: List[crime.Crime] = []
         self.crime_api: pd.DataFrame = api.df
 
+        # create geodataframe form given bounds (required for gpd functions)
         bounds_gdf = gpd.GeoDataFrame(self.bounds, crs=self.bounds.crs,
                                       geometry=self.bounds.geometry)
+        # create large polygon outside range of bounds
         bg = self.bounds.buffer(100000)
         bg = gpd.GeoDataFrame(bg, crs=bg.crs, geometry=bg.geometry)
+        # remove centre from large polygon, leaving only outside to cover
+        # outside the bounds (used for plotting only)
         self.bg = gpd.overlay(bg, bounds_gdf, how='difference')
 
         # tkinter frames
@@ -79,17 +84,17 @@ class Model_tk:
         self.frame_controls.grid(row=0, column=0, sticky="nw")
         self.frame_widgets.grid(row=1, column=1, sticky="swe")
 
-        # model plot area position and init
+        # model plot area position and init canvas
         self.fig = plt.figure(figsize=(7, 7))
         self.ax = self.fig.add_axes([0, 0, 1, 1])
         self.canvas = mpltk.FigureCanvasTkAgg(self.fig, master=self.frame)
         self.canvas._tkcanvas.grid(row=0, column=1, rowspan=2, sticky="nswe")
 
-        # variables for saving models
+        # variables for saving model as a gif
         self.save_img = 0
         self.filenames: List[str] = []
 
-        # tkinter interactive buttons etc, very large section ending line 233
+        # tkinter interactive buttons etc, very large section ending line 200
         # generally assigning functions to buttons, and button positioning
         self.var_crime = tk.IntVar()
         self.opts_crime = [10, 20, 30, 40, 50]
@@ -200,8 +205,52 @@ class Model_tk:
         self.num_police: int = self.var_police.get()
         self.num_iter: int = self.var_iter.get()
 
+    def plot_anim(self, *args: int) -> None:
+        """
+        Display each iteration of the model as a matploblib plot
 
-    # @profile
+        Uses base polygon with overlayed grid polygons.
+        Agents are plotted as a scatter plot.
+
+        :param args: Values derived from the GUI dropdown menus.
+        :type args: int
+
+        #### BUGS
+
+        Matplotlib when using polygon data cannot clear plot every run
+        this appears to cause performance issues as >10 iterations will
+        eventually stop rendering plots. I cannot find a solution to this.
+
+        """
+        # cannot have double dot operators i.e. self.ax.plot
+        ax = self.ax
+
+        # set extents based on extent of the bounds polygon
+        plt.xlim(self.extent['minx'][0], self.extent['maxx'][0])
+        plt.ylim(self.extent['miny'][0], self.extent['maxy'][0])
+        # no axis
+        plt.axis('off')
+
+        # plot the bounds polygon defined in the init
+        self.bounds.plot(ax=ax, facecolor="white", edgecolor="none")
+
+        # plot the bounds grid
+        self.environment.plot(ax=ax, column='stat', cmap='RdYlGn',
+                              edgecolor="white", linewidth=1,
+                              vmin=-10, vmax=10)
+
+        # iterate through police list and plot each as a point on a scatter
+        for p in self.police_list:
+            ax.scatter(p.x, p.y, facecolor="Blue", edgecolors="Green")
+        # iterate through crime list and plot each as a point on a scatter
+        for c in self.crime_list:
+            ax.scatter(c.x, c.y, facecolor=c.col, edgecolors="Red")
+        # plot bg to remove grid the appear outside bounds
+        self.bg.plot(ax=ax, facecolor='white')
+        # create edge to bounds
+        self.bounds.plot(ax=ax, facecolor="none",
+                         edgecolor="black", linewidth=2)
+
     def update(self, *args: int) -> None:
         """Produce output for matplotlib animation, with agents as input.
 
@@ -212,20 +261,12 @@ class Model_tk:
         Args:
             args (int): Values derived from the GUI dropdown menus.
 
-        ##### Bugs
-        Memory profile reveals every iteration with default settings gives 
+        ##### BUGS
+        Memory profile reveals every iteration with default settings gives
         ~3mb increase in memory usage.
-        
-        Matplot lib when using polygon data cannot clear plot every run
-        this appears to cause performance issues as >10 iterations will 
-        eventually stop rendering plots. I cannot find a solution to this.
 
         """
-        ax = self.ax
-        plt.xlim(self.extent['minx'][0], self.extent['maxx'][0])
-        plt.ylim(self.extent['miny'][0], self.extent['maxy'][0])
-        plt.axis('off')
-        # additional crimes
+        # add additional crimes randomly each iteration
         if random.random() < 0.2:
             rand = random.randint(1, 5)
             for _ in range(rand):
@@ -233,33 +274,37 @@ class Model_tk:
                     crime.Crime(self.bounds, self.crime_api))
             print(rand, "new crimes.")
 
-        # iterate through each agent and run each class function
+        # iterate through each police and run each class function
         for p in self.police_list:
             p.move(self.crime_list)
 
+        # do the same for crimes
         for c in self.crime_list:
             c.solve(self.police_list)
 
+        # write results to a csv file, appends each run
         self.write_results()
 
+        # create police gdf to use gpd.within function
         pol = pd.DataFrame()
         for p in self.police_list:
             x = p.x
             y = p.y
             df = pd.DataFrame({'x': x, 'y': y})
             pol = pol.append(df)
-
         geom = gpd.points_from_xy(pol['x'], pol['y'])
         pol_gdf = gpd.GeoDataFrame(pol, geometry=geom)
 
+        # for police that are geographically within a certain grid square
+        # add the environment stat value (i.e. an decrease in area crime)
         within = []
-        for index, row in self.environment.iterrows():
+        for _, row in self.environment.iterrows():
             w = sum(pol_gdf.within(row['geometry']))
             within.append(w)
         self.environment['within'] = within
-
         self.environment['stat'] += self.environment['within']
 
+        # create crime gdf for same reason
         cri = pd.DataFrame()
         for c in self.crime_list:
             if c.solved == 0:
@@ -267,41 +312,23 @@ class Model_tk:
                 y = c.y
                 df = pd.DataFrame({'x': x, 'y': y})
                 cri = cri.append(df)
-
-        if len(cri) > 1:
+        if len(cri) > 1:  # ensure this isn't used if all crimes are solved
             geom = gpd.points_from_xy(cri['x'], cri['y'])
             cri_gdf = gpd.GeoDataFrame(cri, geometry=geom)
 
+            # for crimes within a grid polygon, reduce the area stat
             within = []
-            for index, row in self.environment.iterrows():
+            for _, row in self.environment.iterrows():
                 w = sum(cri_gdf.within(row['geometry']))
                 within.append(w)
             self.environment['within'] = within
 
             self.environment['stat'] -= self.environment['within']
 
-        # plot each agent on the input environment
-        self.bounds.plot(ax=ax, facecolor="white", edgecolor="none")
-
-        self.environment.plot(ax=ax, column='stat', cmap='RdYlGn',
-                              edgecolor="white", linewidth=1,
-                              vmin=-10, vmax=10)
-
-        for p in self.police_list:
-            ax.scatter(p.x, p.y, facecolor="Blue", edgecolors="Green")
-        for c in self.crime_list:
-            ax.scatter(c.x, c.y, facecolor=c.col, edgecolors="Red")
-        ax.text(self.extent['minx'][0],
-                self.extent['minx'][0], self.current_gen)
-        self.bg.plot(ax=ax, facecolor='white')
-        self.bounds.plot(ax=ax, facecolor="none",
-                         edgecolor="black", linewidth=2)
-        plt.xlim(self.extent['minx'][0], self.extent['maxx'][0])
-        plt.ylim(self.extent['miny'][0], self.extent['maxy'][0])
-        plt.axis('off')
-
         print("Current Iteration", self.current_gen + 1, "of",
               self.var_iter.get())
+
+        self.plot_anim()
 
         # allow for saving of the current model step as an image
         if self.save_img == 1 and self.inf is False:
@@ -329,7 +356,7 @@ class Model_tk:
         specified.
 
         Returns:
-            self.filenames: If save_img == 1, will create a list of image 
+            self.filenames: If save_img == 1, will create a list of image
                             filenames.
         """
         if self.inf is False:
@@ -366,17 +393,20 @@ class Model_tk:
         self.crime_list = []
         self.environment = environment
 
-        # make the agents
+        # create police agents by appending each to list of length num_police
         for _ in range(self.num_police):
             self.police_list.append(police.Police(self.bounds))
 
+        # create crime agents by appending each to list of length num_police
         for _ in range(self.num_crime):
             self.crime_list.append(
                 crime.Crime(self.bounds, self.crime_api))
 
-        animation = anim.FuncAnimation(  # noqa (animation unused)
-        self.fig, self.update, frames=self.gen_function, repeat=False
-            )
+        # create matplotlib animation using update function contaning
+        # crime, police, and environment at each iteration
+        animation = anim.FuncAnimation(  # noqa: W0612
+            self.fig, self.update, frames=self.gen_function, repeat=False
+        )
         self.canvas.draw()
 
     def resume(self) -> None:
@@ -386,9 +416,10 @@ class Model_tk:
         stopped. This is useful for changing the number of agents or
         iterations without resetting the model.
         """
+        # allow resume if below max iterations or if infinite iterations
         if (self.current_gen < self.var_iter.get() or self.inf is True):
             self.carry_on = True
-            animation = anim.FuncAnimation(  # noqa
+            animation = anim.FuncAnimation(  # noqa: W0612
                 self.fig, self.update, frames=self.gen_function, repeat=False
             )
             self.canvas.draw()
@@ -410,7 +441,8 @@ class Model_tk:
         pressed to stay pressed.
 
         The toggle inf may not be recessed at the same time as save as gif
-        is selected. Infinite iterations are defined in the generation function.
+        is selected. Infinite iterations are defined in the
+        generation function.
 
         Args:
             args (int): Variables derived from the dropdowns.
@@ -435,9 +467,11 @@ class Model_tk:
         Similarly uses the tkinter button "hack", prevents infinite iterations.
         Button function to allow saving as a gif.
         """
+        # if save button is raised the model isnt saved as a gif
         if self.save_btn.config('relief')[-1] == 'sunken':
             self.save_btn.config(relief="raised")
             self.save_img = 0
+        # if inf button is pressed, cannot press save button
         elif self.inf_btn.config("relief")[-1] == 'raised':
             self.save_btn.config(relief="sunken")
             self.save_img = 1
@@ -453,10 +487,12 @@ class Model_tk:
         # get_write and imread allow for a very fast gif creation, despite
         # large files and number
         print("Creating GIF:", os.getcwd(), "/model.gif")
+        # start "writer" set half second interval I mode is image mode
         with imageio.get_writer("model.gif", mode="I",
                                 duration=0.5) as writer:
             for filename in self.filenames:
                 image = imageio.imread(filename)
+                # appending images to writer creates a gif
                 writer.append_data(image)
                 os.remove(filename)
         print("Finished GIF:", os.getcwd(), "/model.gif")
@@ -484,27 +520,38 @@ class Model_tk:
             Total number of police,
             Total number of crimes.
         """
+        # find total sum of stat across all grid polygons
+        # at a certain iteration
         total_stat = sum(self.environment['stat'])
         total_pol = len(self.police_list)
 
+        # find all non solved crimes
         current_crimes = []
         for c in self.crime_list:
             if c.solved == 0:
                 current_crimes.append(c)
+
+        # add all non solved crimes to list
         total_crime = len(current_crimes)
 
-        print(total_stat)
+        # convert to a pandas dataframe
         df = pd.DataFrame({'police': [total_pol],
                            'crime': [total_crime],
                            'area_stat': [total_stat]})
+        # add to csv dataframe
         self.csv_data = self.csv_data.append(df)
 
+        # for each iteration append data to csv
         if self.current_gen + 1 == self.num_iter:
             self.csv_data.to_csv("./data/total_data.csv", index=False)
 
 
 root = tk.Tk()
+# initialise gui with root, selected bounds, and environment
 gui = Model_tk(root, bounds, environment)
+
+# ensure fixed window size
 root.resizable(False, False)
-# to write docs this cannot be uncommented
-#root.mainloop()
+
+# to write docs ensure this line is commented
+root.mainloop()

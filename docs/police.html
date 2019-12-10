@@ -42,12 +42,12 @@
 <code class="sig-name descname">distance_between</code><span class="sig-paren">(</span><em class="sig-param">agent</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="_modules/police.html#Police.distance_between"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#police.Police.distance_between" title="Permalink to this definition">¶</a></dt>
 <dd><p>Euclidean distance between two geographic points.</p>
 <blockquote>
-<div><p>The output represents the distance referring to the geographic 
+<div><p>The output represents the distance referring to the geographic
 unit of the projection used.</p>
 </div></blockquote>
 <dl class="simple">
-<dt>Args:</dt><dd><p>agent (crime.Crime): A crime object with the attributes x and y. Must
-be the same projection as self.</p>
+<dt>Args:</dt><dd><p>agent (crime.Crime): A crime object with the attributes x and y.
+Must be the same projection as self.</p>
 </dd>
 <dt>Returns:</dt><dd><p>int: Returns a float value of distance using the projection values.</p>
 </dd>
@@ -64,6 +64,20 @@ away than its previous position to a crime it will not move.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>crime (List[crime.Crime]): List of crime ‘agents’ with x and y
 coordinates</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="police.Police.random_movement">
+<code class="sig-name descname">random_movement</code><span class="sig-paren">(</span><em class="sig-param">cur_dist: float, crime_list: List[Crime]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/police.html#Police.random_movement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#police.Police.random_movement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create random movement parameters for each agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cur_dist</strong> (<em>float</em>) – Distance of a police agent from an active crime.</p></li>
+<li><p><strong>crime_list</strong> (<em>List</em><em>[</em><em>&quot;Crime&quot;</em><em>]</em>) – List containing all active crime agents</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

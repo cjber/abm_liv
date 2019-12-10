@@ -32,7 +32,7 @@
           <div class="body" role="main">
             
   <h1>Source code for main</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>  <span class="c1"># for mypy type hints</span>
 <span class="kn">import</span> <span class="nn">tkinter</span> <span class="k">as</span> <span class="nn">tk</span>  <span class="c1"># gui</span>
 <span class="kn">import</span> <span class="nn">imageio</span>  <span class="c1"># save images and gifs</span>
 <span class="kn">import</span> <span class="nn">os</span>  <span class="c1"># os related functions</span>
@@ -41,28 +41,30 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># plots function</span>
 <span class="kn">import</span> <span class="nn">matplotlib.animation</span> <span class="k">as</span> <span class="nn">anim</span>  <span class="c1"># animated plots</span>
 <span class="kn">import</span> <span class="nn">matplotlib.backends.backend_tkagg</span> <span class="k">as</span> <span class="nn">mpltk</span>  <span class="c1"># plot backend for gui</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">random</span>
-
-<span class="kn">from</span> <span class="nn">memory_profiler</span> <span class="k">import</span> <span class="n">profile</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>  <span class="c1"># geographic data manipulation</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>  <span class="c1"># data manipulation</span>
+<span class="kn">import</span> <span class="nn">random</span>  <span class="c1"># provide pseudorandom numbers</span>
 
 <span class="c1"># local imports</span>
 <span class="kn">import</span> <span class="nn">crime</span>
 <span class="kn">import</span> <span class="nn">police</span>
 <span class="kn">import</span> <span class="nn">api</span>
 
+<span class="c1"># read in bounds as a polygon</span>
 <span class="n">bounds</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;./data/bounds.gpkg&quot;</span><span class="p">)</span>
-<span class="c1">#bounds = bounds.to_crs({&#39;init&#39;: &#39;epsg:4326&#39;})</span>
+<span class="c1"># read in grid polygons created by data_clean.py</span>
 <span class="n">environment</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;./data/grid.shp&quot;</span><span class="p">)</span>
-<span class="c1">#environment = environment.to_crs({&#39;init&#39;: &#39;epsg:4326&#39;})</span>
+<span class="c1"># init base stat value</span>
 <span class="n">environment</span><span class="p">[</span><span class="s1">&#39;stat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
 
 <div class="viewcode-block" id="Model_tk"><a class="viewcode-back" href="../main.html#main.Model_tk">[docs]</a><span class="k">class</span> <span class="nc">Model_tk</span><span class="p">:</span>
     <span class="c1"># print some preliminary warnings to consider before running the model</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Select Agents and Iterations from dropdowns...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;Select number of crimes,&quot;</span> <span class="o">+</span>
+        <span class="s2">&quot;number of police&quot;</span> <span class="o">+</span>
+        <span class="s2">&quot;and number of iterations from dropdowns...&quot;</span>
+    <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Before running select save as gif, or infinite iterations&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">:</span> <span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">,</span>
@@ -71,14 +73,14 @@
         <span class="sd">&quot;&quot;&quot;Define the initial state of the tkinter main window.</span>
 
 <span class="sd">        Defines initial variables and state for the main tkinter GUI window</span>
-<span class="sd">        initialised by a tk.Tk() class given byt he master variable.</span>
+<span class="sd">        initialised by a tk.Tk() class given by the master variable.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            master (tk.Tk): The main GUI window.</span>
 <span class="sd">            bounds (gpd.GeoDataFrame): A geographic dataframe showing the</span>
 <span class="sd">                                       area of interest.</span>
-<span class="sd">            environment (gpd.GeoDataFrame): A geographic dataframe of </span>
-<span class="sd">                                            multipolygons derived from the </span>
+<span class="sd">            environment (gpd.GeoDataFrame): A geographic dataframe of</span>
+<span class="sd">                                            multipolygons derived from the</span>
 <span class="sd">                                            bounds.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -86,7 +88,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">master</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="n">environment</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">geometry</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">bounds</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">csv_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
@@ -97,10 +98,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">crime_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">crime</span><span class="o">.</span><span class="n">Crime</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">crime_api</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">df</span>
 
+        <span class="c1"># create geodataframe form given bounds (required for gpd functions)</span>
         <span class="n">bounds_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
                                       <span class="n">geometry</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
+        <span class="c1"># create large polygon outside range of bounds</span>
         <span class="n">bg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
         <span class="n">bg</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">bg</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">bg</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">bg</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
+        <span class="c1"># remove centre from large polygon, leaving only outside to cover</span>
+        <span class="c1"># outside the bounds (used for plotting only)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bg</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span><span class="n">bg</span><span class="p">,</span> <span class="n">bounds_gdf</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;difference&#39;</span><span class="p">)</span>
 
         <span class="c1"># tkinter frames</span>
@@ -113,17 +118,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">frame_controls</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;nw&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frame_widgets</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;swe&quot;</span><span class="p">)</span>
 
-        <span class="c1"># model plot area position and init</span>
+        <span class="c1"># model plot area position and init canvas</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">mpltk</span><span class="o">.</span><span class="n">FigureCanvasTkAgg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">_tkcanvas</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rowspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="s2">&quot;nswe&quot;</span><span class="p">)</span>
 
-        <span class="c1"># variables for saving models</span>
+        <span class="c1"># variables for saving model as a gif</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_img</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># tkinter interactive buttons etc, very large section ending line 233</span>
+        <span class="c1"># tkinter interactive buttons etc, very large section ending line 200</span>
         <span class="c1"># generally assigning functions to buttons, and button positioning</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">var_crime</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">IntVar</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">opts_crime</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]</span>
@@ -234,8 +239,52 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_police</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_police</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_iter</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 
+<div class="viewcode-block" id="Model_tk.plot_anim"><a class="viewcode-back" href="../main.html#main.Model_tk.plot_anim">[docs]</a>    <span class="k">def</span> <span class="nf">plot_anim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Display each iteration of the model as a matploblib plot</span>
 
-    <span class="c1"># @profile</span>
+<span class="sd">        Uses base polygon with overlayed grid polygons.</span>
+<span class="sd">        Agents are plotted as a scatter plot.</span>
+
+<span class="sd">        :param args: Values derived from the GUI dropdown menus.</span>
+<span class="sd">        :type args: int</span>
+
+<span class="sd">        #### BUGS</span>
+
+<span class="sd">        Matplotlib when using polygon data cannot clear plot every run</span>
+<span class="sd">        this appears to cause performance issues as &gt;10 iterations will</span>
+<span class="sd">        eventually stop rendering plots. I cannot find a solution to this.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># cannot have double dot operators i.e. self.ax.plot</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span>
+
+        <span class="c1"># set extents based on extent of the bounds polygon</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;minx&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;maxx&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;miny&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;maxy&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># no axis</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+        <span class="c1"># plot the bounds polygon defined in the init</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+
+        <span class="c1"># plot the bounds grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;stat&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlGn&#39;</span><span class="p">,</span>
+                              <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                              <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="c1"># iterate through police list and plot each as a point on a scatter</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">police_list</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;Blue&quot;</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;Green&quot;</span><span class="p">)</span>
+        <span class="c1"># iterate through crime list and plot each as a point on a scatter</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">crime_list</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">col</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;Red&quot;</span><span class="p">)</span>
+        <span class="c1"># plot bg to remove grid the appear outside bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bg</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+        <span class="c1"># create edge to bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+                         <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Model_tk.update"><a class="viewcode-back" href="../main.html#main.Model_tk.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Produce output for matplotlib animation, with agents as input.</span>
 
@@ -246,20 +295,12 @@
 <span class="sd">        Args:</span>
 <span class="sd">            args (int): Values derived from the GUI dropdown menus.</span>
 
-<span class="sd">        ##### Bugs</span>
-<span class="sd">        Memory profile reveals every iteration with default settings gives </span>
+<span class="sd">        ##### BUGS</span>
+<span class="sd">        Memory profile reveals every iteration with default settings gives</span>
 <span class="sd">        ~3mb increase in memory usage.</span>
-<span class="sd">        </span>
-<span class="sd">        Matplot lib when using polygon data cannot clear plot every run</span>
-<span class="sd">        this appears to cause performance issues as &gt;10 iterations will </span>
-<span class="sd">        eventually stop rendering plots. I cannot find a solution to this.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;minx&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;maxx&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;miny&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;maxy&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-        <span class="c1"># additional crimes</span>
+        <span class="c1"># add additional crimes randomly each iteration</span>
         <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.2</span><span class="p">:</span>
             <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rand</span><span class="p">):</span>
@@ -267,33 +308,37 @@
                     <span class="n">crime</span><span class="o">.</span><span class="n">Crime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">crime_api</span><span class="p">))</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">rand</span><span class="p">,</span> <span class="s2">&quot;new crimes.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># iterate through each agent and run each class function</span>
+        <span class="c1"># iterate through each police and run each class function</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">police_list</span><span class="p">:</span>
             <span class="n">p</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crime_list</span><span class="p">)</span>
 
+        <span class="c1"># do the same for crimes</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">crime_list</span><span class="p">:</span>
             <span class="n">c</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">police_list</span><span class="p">)</span>
 
+        <span class="c1"># write results to a csv file, appends each run</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_results</span><span class="p">()</span>
 
+        <span class="c1"># create police gdf to use gpd.within function</span>
         <span class="n">pol</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">police_list</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">})</span>
             <span class="n">pol</span> <span class="o">=</span> <span class="n">pol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-
         <span class="n">geom</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">pol</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">pol</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
         <span class="n">pol_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">pol</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">geom</span><span class="p">)</span>
 
+        <span class="c1"># for police that are geographically within a certain grid square</span>
+        <span class="c1"># add the environment stat value (i.e. an decrease in area crime)</span>
         <span class="n">within</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
             <span class="n">w</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pol_gdf</span><span class="o">.</span><span class="n">within</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]))</span>
             <span class="n">within</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="s1">&#39;within&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">within</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="s1">&#39;stat&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="s1">&#39;within&#39;</span><span class="p">]</span>
 
+        <span class="c1"># create crime gdf for same reason</span>
         <span class="n">cri</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">crime_list</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">solved</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -301,41 +346,23 @@
                 <span class="n">y</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">y</span>
                 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">})</span>
                 <span class="n">cri</span> <span class="o">=</span> <span class="n">cri</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cri</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cri</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># ensure this isn&#39;t used if all crimes are solved</span>
             <span class="n">geom</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">cri</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">cri</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
             <span class="n">cri_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">cri</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">geom</span><span class="p">)</span>
 
+            <span class="c1"># for crimes within a grid polygon, reduce the area stat</span>
             <span class="n">within</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
                 <span class="n">w</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cri_gdf</span><span class="o">.</span><span class="n">within</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]))</span>
                 <span class="n">within</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="s1">&#39;within&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">within</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="s1">&#39;stat&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="s1">&#39;within&#39;</span><span class="p">]</span>
 
-        <span class="c1"># plot each agent on the input environment</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;stat&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlGn&#39;</span><span class="p">,</span>
-                              <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                              <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">police_list</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;Blue&quot;</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;Green&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">crime_list</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">col</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;Red&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;minx&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;minx&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_gen</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bg</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
-                         <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;minx&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;maxx&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;miny&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="s1">&#39;maxy&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current Iteration&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_gen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;of&quot;</span><span class="p">,</span>
               <span class="bp">self</span><span class="o">.</span><span class="n">var_iter</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_anim</span><span class="p">()</span>
 
         <span class="c1"># allow for saving of the current model step as an image</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_img</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
@@ -363,7 +390,7 @@
 <span class="sd">        specified.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            self.filenames: If save_img == 1, will create a list of image </span>
+<span class="sd">            self.filenames: If save_img == 1, will create a list of image</span>
 <span class="sd">                            filenames.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
@@ -400,17 +427,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">crime_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="n">environment</span>
 
-        <span class="c1"># make the agents</span>
+        <span class="c1"># create police agents by appending each to list of length num_police</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_police</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">police_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">police</span><span class="o">.</span><span class="n">Police</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">))</span>
 
+        <span class="c1"># create crime agents by appending each to list of length num_police</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_crime</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">crime_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">crime</span><span class="o">.</span><span class="n">Crime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">crime_api</span><span class="p">))</span>
 
-        <span class="n">animation</span> <span class="o">=</span> <span class="n">anim</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span>  <span class="c1"># noqa (animation unused)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_function</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="kc">False</span>
-            <span class="p">)</span>
+        <span class="c1"># create matplotlib animation using update function contaning</span>
+        <span class="c1"># crime, police, and environment at each iteration</span>
+        <span class="n">animation</span> <span class="o">=</span> <span class="n">anim</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span>  <span class="c1"># noqa: W0612</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_function</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Model_tk.resume"><a class="viewcode-back" href="../main.html#main.Model_tk.resume">[docs]</a>    <span class="k">def</span> <span class="nf">resume</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -420,9 +450,10 @@
 <span class="sd">        stopped. This is useful for changing the number of agents or</span>
 <span class="sd">        iterations without resetting the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># allow resume if below max iterations or if infinite iterations</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_gen</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_iter</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">inf</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">carry_on</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">animation</span> <span class="o">=</span> <span class="n">anim</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span>  <span class="c1"># noqa</span>
+            <span class="n">animation</span> <span class="o">=</span> <span class="n">anim</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span>  <span class="c1"># noqa: W0612</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_function</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="kc">False</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
@@ -444,7 +475,8 @@
 <span class="sd">        pressed to stay pressed.</span>
 
 <span class="sd">        The toggle inf may not be recessed at the same time as save as gif</span>
-<span class="sd">        is selected. Infinite iterations are defined in the generation function.</span>
+<span class="sd">        is selected. Infinite iterations are defined in the</span>
+<span class="sd">        generation function.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            args (int): Variables derived from the dropdowns.</span>
@@ -469,9 +501,11 @@
 <span class="sd">        Similarly uses the tkinter button &quot;hack&quot;, prevents infinite iterations.</span>
 <span class="sd">        Button function to allow saving as a gif.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if save button is raised the model isnt saved as a gif</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_btn</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s1">&#39;relief&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;sunken&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save_btn</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">relief</span><span class="o">=</span><span class="s2">&quot;raised&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save_img</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># if inf button is pressed, cannot press save button</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">inf_btn</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;relief&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;raised&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save_btn</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">relief</span><span class="o">=</span><span class="s2">&quot;sunken&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save_img</span> <span class="o">=</span> <span class="mi">1</span>
@@ -487,10 +521,12 @@
         <span class="c1"># get_write and imread allow for a very fast gif creation, despite</span>
         <span class="c1"># large files and number</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating GIF:&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;/model.gif&quot;</span><span class="p">)</span>
+        <span class="c1"># start &quot;writer&quot; set half second interval I mode is image mode</span>
         <span class="k">with</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span><span class="s2">&quot;model.gif&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;I&quot;</span><span class="p">,</span>
                                 <span class="n">duration</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">:</span>
                 <span class="n">image</span> <span class="o">=</span> <span class="n">imageio</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                <span class="c1"># appending images to writer creates a gif</span>
                 <span class="n">writer</span><span class="o">.</span><span class="n">append_data</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished GIF:&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;/model.gif&quot;</span><span class="p">)</span></div>
@@ -518,29 +554,40 @@
 <span class="sd">            Total number of police,</span>
 <span class="sd">            Total number of crimes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># find total sum of stat across all grid polygons</span>
+        <span class="c1"># at a certain iteration</span>
         <span class="n">total_stat</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environment</span><span class="p">[</span><span class="s1">&#39;stat&#39;</span><span class="p">])</span>
         <span class="n">total_pol</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">police_list</span><span class="p">)</span>
 
+        <span class="c1"># find all non solved crimes</span>
         <span class="n">current_crimes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">crime_list</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">solved</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">current_crimes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+        <span class="c1"># add all non solved crimes to list</span>
         <span class="n">total_crime</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_crimes</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="n">total_stat</span><span class="p">)</span>
+        <span class="c1"># convert to a pandas dataframe</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;police&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">total_pol</span><span class="p">],</span>
                            <span class="s1">&#39;crime&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">total_crime</span><span class="p">],</span>
                            <span class="s1">&#39;area_stat&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">total_stat</span><span class="p">]})</span>
+        <span class="c1"># add to csv dataframe</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">csv_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">csv_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
+        <span class="c1"># for each iteration append data to csv</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_gen</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_iter</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">csv_data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;./data/total_data.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div></div>
 
 
 <span class="n">root</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+<span class="c1"># initialise gui with root, selected bounds, and environment</span>
 <span class="n">gui</span> <span class="o">=</span> <span class="n">Model_tk</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">environment</span><span class="p">)</span>
+
+<span class="c1"># ensure fixed window size</span>
 <span class="n">root</span><span class="o">.</span><span class="n">resizable</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-<span class="c1"># to write docs this cannot be uncommented</span>
+
+<span class="c1"># to write docs ensure this line is commented</span>
 <span class="c1">#root.mainloop()</span>
 </pre></div>
 
