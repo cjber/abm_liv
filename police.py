@@ -1,5 +1,5 @@
 import geopandas as gpd  # geographic data manipulation
-import random  # pseudorandom numbres
+import random  # pseudorandom numbers
 import pandas as pd  # data manipulation
 
 from typing import List
@@ -28,12 +28,12 @@ class Police:
             self.x = random.uniform(x_min, x_max)
             self.y = random.uniform(y_min, y_max)
 
-            # convert to geodf
+            # convert to geodataframe
             df = pd.DataFrame({'x': [self.x], 'y': [self.y]})
             geom = gpd.points_from_xy(df.x, df.y)
             gdf = gpd.GeoDataFrame(df, geometry=geom)
 
-            # check whether point falls within polygon 
+            # check whether point falls within polygon
             within = int(gdf.within(self.bounds))
 
             # only keep point if within poly, otherwise repeat random coords
@@ -59,7 +59,7 @@ class Police:
         distance = ((self.x - agent.x)**2 +
                     (self.y - agent.y)**2)**0.5
         distance = float(distance)
-        return(distance)
+        return distance
 
     def random_movement(self, cur_dist: float, crime_list: List[int]):
         """
@@ -70,41 +70,39 @@ class Police:
         :param crime_list: List containing all active crime agents
         :type crime_list: List["Crime"]
         """
+        dist = []
         if random.random() < 0.5:
             # add 1000 to police x value
             self.x = (self.x + 1000)
-            dist = []
             for c in crime_list:
-                # find new distance from police to crime
+                # find new distance from police to all crimes
                 dist.append(self.distance_between(c))
-            # return to original x value if distance from nearest crime
-            # to police to further than original police x position
+            # move in opposite direction if distance from nearest min(dist)
+            # crime to police further than original police x position
             if min(dist) > cur_dist:
-                self.x = (self.x - 1000)
+                self.x = (self.x - 2000)
         else:
             # repeat the above but take - 1000 x value
             self.x = (self.x - 1000)
-            dist = []
             for c in crime_list:
                 dist.append(self.distance_between(c))
             if min(dist) > cur_dist:
-                self.x = (self.x + 1000)
+                self.x = (self.x + 2000)
+        dist = []
         if random.random() < 0.5:
             # repeat with + 1000 to y value
             self.y = (self.y + 1000)
-            dist = []
             for c in crime_list:
                 dist.append(self.distance_between(c))
             if min(dist) > cur_dist:
-                self.y = (self.y - 1000)
+                self.y = (self.y - 2000)
         else:
             # repeat with - 1000 to y value
             self.y = (self.y - 1000)
-            dist = []
             for c in crime_list:
                 dist.append(self.distance_between(c))
             if min(dist) > cur_dist:
-                self.y = (self.y + 1000)
+                self.y = (self.y + 2000)
 
     def move(self, crime):
         """Move the police semi randomly, head in direction of crimes.
@@ -117,12 +115,10 @@ class Police:
             crime (List[crime.Crime]): List of crime 'agents' with x and y
             coordinates
         """
-        # find only unsolved crimes in the crime list
-        crime_list = []
-        for c in crime:
-            if c.solved == 0:
-                crime_list.append(c)
-        i = 0
+        # keep only unsolved crimes
+        crime_list = [c for c in crime if c.solved == 0]
+
+        i = 0  # for numbering loops
         # while loop to attempt movement of police within bounds polygon
         while True:
             cur_dist = []
@@ -133,6 +129,9 @@ class Police:
                 # find min distance
                 cur_dist = min(cur_dist)
                 # call the random movement function on police
+                # which takes current min distance from a crime point to
+                # determine whether or not to move the police in the random
+                # direction
                 self.random_movement(cur_dist, crime_list)
             # create xy dataframe
             df = pd.DataFrame({'x': [self.x], 'y': [self.y]})
@@ -142,10 +141,10 @@ class Police:
             gdf = gpd.GeoDataFrame(df, geometry=geom)
             # find whether new xy points are within polygon bounds
             within = int(gdf.within(self.bounds))
-            i += 1
             # only allow loop to break if new xy are within bounds
             # allow up to 10 times, if over 10 times the police officer is
             # lost outside the bounds
+            i += 1
             if i > 10:
                 print("Police officer has left the bounds.")
                 break

@@ -359,11 +359,7 @@ class Model_tk:
             self.filenames: If save_img == 1, will create a list of image
                             filenames.
         """
-        if self.inf is False:
-            self.num_iter = self.num_iter
-        else:
-            self.num_iter = 999999999  # cannot use inf float
-
+        self.num_iter = self.num_iter if self.inf is False else 999999999
         # stop the function if number of iterations are exceeded
         # add one to each current gen for each iteration
         while (self.current_gen < self.num_iter) & (self.carry_on):
@@ -525,12 +521,7 @@ class Model_tk:
         total_stat = sum(self.environment['stat'])
         total_pol = len(self.police_list)
 
-        # find all non solved crimes
-        current_crimes = []
-        for c in self.crime_list:
-            if c.solved == 0:
-                current_crimes.append(c)
-
+        current_crimes = [c for c in self.crime_list if c.solved == 0]
         # add all non solved crimes to list
         total_crime = len(current_crimes)
 
@@ -554,4 +545,4 @@ gui = Model_tk(root, bounds, environment)
 root.resizable(False, False)
 
 # to write docs ensure this line is commented
-root.mainloop()
+#root.mainloop()

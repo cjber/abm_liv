@@ -90,6 +90,21 @@
 <p>This would cause a crime to randomly move a small distance every so often. This function should then be added to the <code class="code bash docutils literal notranslate"><span class="pre">update</span></code> function in the <code class="code bash docutils literal notranslate"><span class="pre">main.py</span></code> script. In the section:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">crime_list</span><span class="p">:</span>
     <span class="n">c</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">police_list</span><span class="p">)</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">shift</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Changing the selection of crime points from police.uk API.</dt><dd><ul>
+<li><p>The <code class="code bash docutils literal notranslate"><span class="pre">api.py</span></code> script contains the variable <cite>months</cite> which may be edited to change the selection of crimes.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The line that requires editing is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">months</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;2018-02-01&#39;</span><span class="p">,</span> <span class="s1">&#39;2018-02-01&#39;</span><span class="p">,</span>
+                       <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;MS&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

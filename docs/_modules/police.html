@@ -33,7 +33,7 @@
             
   <h1>Source code for police</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>  <span class="c1"># geographic data manipulation</span>
-<span class="kn">import</span> <span class="nn">random</span>  <span class="c1"># pseudorandom numbres</span>
+<span class="kn">import</span> <span class="nn">random</span>  <span class="c1"># pseudorandom numbers</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>  <span class="c1"># data manipulation</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
@@ -62,12 +62,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
 
-            <span class="c1"># convert to geodf</span>
+            <span class="c1"># convert to geodataframe</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">],</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">]})</span>
             <span class="n">geom</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
             <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">geom</span><span class="p">)</span>
 
-            <span class="c1"># check whether point falls within polygon </span>
+            <span class="c1"># check whether point falls within polygon</span>
             <span class="n">within</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gdf</span><span class="o">.</span><span class="n">within</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">))</span>
 
             <span class="c1"># only keep point if within poly, otherwise repeat random coords</span>
@@ -93,7 +93,7 @@
         <span class="n">distance</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">agent</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
                     <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">agent</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
         <span class="n">distance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">distance</span></div>
 
 <div class="viewcode-block" id="Police.random_movement"><a class="viewcode-back" href="../police.html#police.Police.random_movement">[docs]</a>    <span class="k">def</span> <span class="nf">random_movement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cur_dist</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">crime_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -104,41 +104,39 @@
 <span class="sd">        :param crime_list: List containing all active crime agents</span>
 <span class="sd">        :type crime_list: List[&quot;Crime&quot;]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
             <span class="c1"># add 1000 to police x value</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">)</span>
-            <span class="n">dist</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">crime_list</span><span class="p">:</span>
-                <span class="c1"># find new distance from police to crime</span>
+                <span class="c1"># find new distance from police to all crimes</span>
                 <span class="n">dist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_between</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
-            <span class="c1"># return to original x value if distance from nearest crime</span>
-            <span class="c1"># to police to further than original police x position</span>
+            <span class="c1"># move in opposite direction if distance from nearest min(dist)</span>
+            <span class="c1"># crime to police further than original police x position</span>
             <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">cur_dist</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1000</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="mi">2000</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># repeat the above but take - 1000 x value</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1000</span><span class="p">)</span>
-            <span class="n">dist</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">crime_list</span><span class="p">:</span>
                 <span class="n">dist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_between</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
             <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">cur_dist</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">2000</span><span class="p">)</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
             <span class="c1"># repeat with + 1000 to y value</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">)</span>
-            <span class="n">dist</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">crime_list</span><span class="p">:</span>
                 <span class="n">dist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_between</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
             <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">cur_dist</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1000</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">2000</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># repeat with - 1000 to y value</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1000</span><span class="p">)</span>
-            <span class="n">dist</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">crime_list</span><span class="p">:</span>
                 <span class="n">dist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_between</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
             <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">cur_dist</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="mi">2000</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Police.move"><a class="viewcode-back" href="../police.html#police.Police.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crime</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Move the police semi randomly, head in direction of crimes.</span>
@@ -151,12 +149,10 @@
 <span class="sd">            crime (List[crime.Crime]): List of crime &#39;agents&#39; with x and y</span>
 <span class="sd">            coordinates</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># find only unsolved crimes in the crime list</span>
-        <span class="n">crime_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">crime</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">solved</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">crime_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># keep only unsolved crimes</span>
+        <span class="n">crime_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">crime</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">solved</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># for numbering loops</span>
         <span class="c1"># while loop to attempt movement of police within bounds polygon</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">cur_dist</span> <span class="o">=</span> <span class="p">[]</span>
@@ -167,6 +163,9 @@
                 <span class="c1"># find min distance</span>
                 <span class="n">cur_dist</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">cur_dist</span><span class="p">)</span>
                 <span class="c1"># call the random movement function on police</span>
+                <span class="c1"># which takes current min distance from a crime point to</span>
+                <span class="c1"># determine whether or not to move the police in the random</span>
+                <span class="c1"># direction</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">random_movement</span><span class="p">(</span><span class="n">cur_dist</span><span class="p">,</span> <span class="n">crime_list</span><span class="p">)</span>
             <span class="c1"># create xy dataframe</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">],</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">]})</span>
@@ -176,10 +175,10 @@
             <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">geom</span><span class="p">)</span>
             <span class="c1"># find whether new xy points are within polygon bounds</span>
             <span class="n">within</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gdf</span><span class="o">.</span><span class="n">within</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">))</span>
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="c1"># only allow loop to break if new xy are within bounds</span>
             <span class="c1"># allow up to 10 times, if over 10 times the police officer is</span>
             <span class="c1"># lost outside the bounds</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Police officer has left the bounds.&quot;</span><span class="p">)</span>
                 <span class="k">break</span>

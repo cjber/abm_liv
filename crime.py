@@ -59,9 +59,8 @@ class Crime:
         Returns:
             int: Distance with values associated with the projection.
         """
-        distance = ((self.x - agent.x)**2 +
-                    (self.y - agent.y)**2)**0.5
-        return(distance)
+        return ((self.x - agent.x)**2 +
+                        (self.y - agent.y)**2)**0.5
 
     def solve(self, police_list):
         """Solve a crime by proximity to police.

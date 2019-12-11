@@ -69,6 +69,15 @@ This would cause a crime to randomly move a small distance every so often. This 
 
     for c in self.crime_list:
         c.solve(self.police_list)
+        c.shift()
+
+* Changing the selection of crime points from police.uk API.
+    - The :bash:`api.py` script contains the variable `months` which may be edited to change the selection of crimes.
+
+The line that requires editing is::
+
+    months = pd.date_range('2018-02-01', '2018-02-01',
+                           freq='MS').strftime("%Y-%m").tolist()
 
 Known Bugs
 ----------
