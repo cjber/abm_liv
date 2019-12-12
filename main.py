@@ -545,4 +545,4 @@ gui = Model_tk(root, bounds, environment)
 root.resizable(False, False)
 
 # to write docs ensure this line is commented
-#root.mainloop()
+root.mainloop()
