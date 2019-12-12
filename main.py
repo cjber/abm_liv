@@ -267,7 +267,7 @@ class Model_tk:
 
         """
         # add additional crimes randomly each iteration
-        if random.random() < 0.2:
+        if random.random() < 0.4:
             rand = random.randint(1, 5)
             for _ in range(rand):
                 self.crime_list.append(
@@ -535,6 +535,7 @@ class Model_tk:
         # for each iteration append data to csv
         if self.current_gen + 1 == self.num_iter:
             self.csv_data.to_csv("./data/total_data.csv", index=False)
+            print("Written results to data/total_data.csv")
 
 
 root = tk.Tk()
