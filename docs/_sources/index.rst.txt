@@ -39,7 +39,7 @@ Here are the basic steps required to contribute to existing code.
 
 3. Look at the `Known Bugs`_ section to get inspiration for code contributions.
 
-4. Submit a pull request to GitHub.
+4. Submit a pull request to GitHub. Guidance may be found here: https://opensource.guide/how-to-contribute/
 
 
 Customising the Code

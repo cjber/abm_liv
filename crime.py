@@ -20,6 +20,7 @@ class Crime:
         """
         # takes bounds from main.py
         self.bounds = bounds
+        self.crime_api = crime_api
 
         # initial variables
         self.col = "Red"
@@ -28,10 +29,10 @@ class Crime:
         # loop to take random crime point from api that falls within bounds
         # polygon
         while True:
-            # int for random row
-            i = random.randint(0, len(crime_api) - 1)
-            x = crime_api['x'].loc[i]
-            y = crime_api['y'].loc[i]
+            # int to find random row in dataframe from api
+            i = random.randint(0, len(self.crime_api) - 1)
+            x = self.crime_api['x'].loc[i]
+            y = self.crime_api['y'].loc[i]
 
             # convert point to geodatafame
             df = pd.DataFrame({'x': [x], 'y': [y]})
@@ -58,6 +59,25 @@ class Crime:
 
         Returns:
             int: Distance with values associated with the projection.
+
+        DOCTESTS:
+        >>> a = pd.DataFrame(); b = pd.DataFrame()
+        >>> a.x = 1; a.y = 1
+        >>> b.x = 1; b.y = 1
+        >>> Crime.distance_between(a, b)
+        0.0
+
+        >>> a = pd.DataFrame(); b = pd.DataFrame()
+        >>> a.x = 10; a.y = 1
+        >>> b.x = 1; b.y = 1
+        >>> Crime.distance_between(a, b)
+        9.0
+
+        >>> a = pd.DataFrame(); b = pd.DataFrame()
+        >>> a.x = 1; a.y = 1
+        >>> b.x = 1; b.y = 10
+        >>> Crime.distance_between(a, b)
+        9.0
         """
         return ((self.x - agent.x)**2 +
                         (self.y - agent.y)**2)**0.5
