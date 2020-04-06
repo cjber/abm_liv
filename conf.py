@@ -77,36 +77,12 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-html_theme_options = {
-    'description': 'An agent based model framework, written in python and providing GUI features through Tkinter.',
-    'body_text': '#afafaf',
-    'anchor_hover_bg': '#101f2d',
-    'anchor_hover_fg': '#afafaf',
-    'note_bg': '#101f2d',
-    'footnote_bg': '#101f2d',
-    'narrow_sidebar_bg': '#101f2d',
-    'narrow_sidebar_fg': '#afafaf',
-    'sidebar_header': '#afafaf',
-    'sidebar_hr': '#afafaf',
-    'sidebar_link': '#afafaf',
-    'sidebar_text': '#afafaf',
-    'pre_bg': '#09121a',
-    'link': '#1656a9',
-    'sidebar_search_button': '#09121a',
-    'code_highlight': '#080f14',
-    'code_font_size': '14px'
-}
-
-html_css_files = [
-    "css/custom.css",
-]
-
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
