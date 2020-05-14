@@ -19,7 +19,7 @@ index = [1, 0, 3, 2]
 bounds = [bounds[i] for i in index]
 
 index = [0, 3, 2, 1]
-bounds = bounds + [bounds[i] for i in index]
+bounds += [bounds[i] for i in index]
 
 
 coords = [','.join(map(str, bounds[0:2])), ','.join(map(str, bounds[2:4])),
