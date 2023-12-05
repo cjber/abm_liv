@@ -26,9 +26,12 @@ rows.reverse() # reverse rows
 # create list of square polgyons defined by extents and length/widths
 polygons = []
 for x in cols:
-    for y in rows:
-        polygons.append(
-            Polygon([(x, y), (x+wide, y), (x+wide, y-length), (x, y-length)]))
+    polygons.extend(
+        Polygon(
+            [(x, y), (x + wide, y), (x + wide, y - length), (x, y - length)]
+        )
+        for y in rows
+    )
 ##
 
 # convert to gdf and save
