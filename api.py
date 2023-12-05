@@ -12,18 +12,20 @@ bounds = bounds.dissolve(by='dissolve')
 # use mercator projection
 bounds = bounds.to_crs({'init': 'epsg:4326'})
 
-# create vector of liv bbox
-bounds = bounds.total_bounds
-
 index = [1, 0, 3, 2]
+bounds = bounds.total_bounds
 bounds = [bounds[i] for i in index]
 
 index = [0, 3, 2, 1]
 bounds += [bounds[i] for i in index]
 
 
-coords = [','.join(map(str, bounds[0:2])), ','.join(map(str, bounds[2:4])),
-          ','.join(map(str, bounds[4:6])), ','.join(map(str, bounds[6:8]))]
+coords = [
+    ','.join(map(str, bounds[:2])),
+    ','.join(map(str, bounds[2:4])),
+    ','.join(map(str, bounds[4:6])),
+    ','.join(map(str, bounds[6:8])),
+]
 
 index = [3, 1, 2, 0]
 coords = [coords[i] for i in index]
@@ -37,11 +39,9 @@ print('Retrieving Crime coordinates from data.police.uk API...')
 # base police API url
 url = "https://data.police.uk/api/crimes-street/all-crime"
 
-response = requests.get(url +
-                        "?poly=" +
-                        coords_str +
-                        "&date=" +
-                        random.choice(months))
+response = requests.get(
+    f"{url}?poly={coords_str}&date=" + random.choice(months)
+)
 
 print('Request sent.')
 if response.status_code != 200:

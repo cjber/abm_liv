@@ -333,7 +333,7 @@ class Model_tk:
         # allow for saving of the current model step as an image
         if self.save_img == 1 and self.inf is False:
             savename = str(self.current_gen + 1)
-            plt.savefig(savename + ".jpg")
+            plt.savefig(f"{savename}.jpg")
 
     def initial_vars(self, *args: int) -> None:
         """Retrieves values from GUI dropdown menus.
@@ -367,7 +367,7 @@ class Model_tk:
             self.current_gen = self.current_gen + 1
             # append the new image to the list of filenames
             if self.save_img == 1:
-                self.filenames.append(str(self.current_gen) + ".jpg")
+                self.filenames.append(f"{str(self.current_gen)}.jpg")
         # after the gen functions ends, turn images into a gif if selected
         if self.save_img == 1:
             self.create_gif()
@@ -390,14 +390,13 @@ class Model_tk:
         self.environment = environment
 
         # create police agents by appending each to list of length num_police
-        for _ in range(self.num_police):
-            self.police_list.append(police.Police(self.bounds))
-
+        self.police_list.extend(
+            police.Police(self.bounds) for _ in range(self.num_police)
+        )
         # create crime agents by appending each to list of length num_police
-        for _ in range(self.num_crime):
-            self.crime_list.append(
-                crime.Crime(self.bounds, self.crime_api))
-
+        self.crime_list.extend(
+            crime.Crime(self.bounds, self.crime_api) for _ in range(self.num_crime)
+        )
         # create matplotlib animation using update function contaning
         # crime, police, and environment at each iteration
         animation = anim.FuncAnimation(  # noqa: W0612

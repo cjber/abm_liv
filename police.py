@@ -58,8 +58,7 @@ class Police:
         """
         distance = ((self.x - agent.x)**2 +
                     (self.y - agent.y)**2)**0.5
-        distance = float(distance)
-        return distance
+        return float(distance)
 
     def random_movement(self, cur_dist: float, crime_list: List[int]):
         """
@@ -74,9 +73,7 @@ class Police:
         if random.random() < 0.5:
             # add 1000 to police x value
             self.x = (self.x + 1000)
-            for c in crime_list:
-                # find new distance from police to all crimes
-                dist.append(self.distance_between(c))
+            dist.extend(self.distance_between(c) for c in crime_list)
             # move in opposite direction if distance from nearest min(dist)
             # crime to police further than original police x position
             if min(dist) > cur_dist:
@@ -84,23 +81,20 @@ class Police:
         else:
             # repeat the above but take - 1000 x value
             self.x = (self.x - 1000)
-            for c in crime_list:
-                dist.append(self.distance_between(c))
+            dist.extend(self.distance_between(c) for c in crime_list)
             if min(dist) > cur_dist:
                 self.x = (self.x + 2000)
         dist = []
         if random.random() < 0.5:
             # repeat with + 1000 to y value
             self.y = (self.y + 1000)
-            for c in crime_list:
-                dist.append(self.distance_between(c))
+            dist.extend(self.distance_between(c) for c in crime_list)
             if min(dist) > cur_dist:
                 self.y = (self.y - 2000)
         else:
             # repeat with - 1000 to y value
             self.y = (self.y - 1000)
-            for c in crime_list:
-                dist.append(self.distance_between(c))
+            dist.extend(self.distance_between(c) for c in crime_list)
             if min(dist) > cur_dist:
                 self.y = (self.y + 2000)
 
@@ -123,9 +117,7 @@ class Police:
         while True:
             cur_dist = []
             if len(crime_list) > 1:
-                for c in crime_list:
-                    # find distance from police to crimes
-                    cur_dist.append(self.distance_between(c))
+                cur_dist.extend(self.distance_between(c) for c in crime_list)
                 # find min distance
                 cur_dist = min(cur_dist)
                 # call the random movement function on police
